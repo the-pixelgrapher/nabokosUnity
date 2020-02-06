@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public bool isPowered;                  // Is magnet powered on?
     public bool isPulling;
     public int moveCount;
-    private Vector2 direction;
+    public Vector2 direction;
     private List<Vector2> moveRecord = new List<Vector2>();
 
     public enum Rot
@@ -44,6 +44,11 @@ public class PlayerController : MonoBehaviour
         if (iman.InputRead("confirmD"))
         {
             isPowered = !isPowered;
+            if (isPowered)
+            {
+                SetRotation();
+                Tween();
+            }
         }
 
         sprite.sprite = isPowered ? powerOnSprite : powerOffSprite;
@@ -107,8 +112,12 @@ public class PlayerController : MonoBehaviour
 
     private void MagnetPull()
     {
-        GameObject crate = null;
         isPulling = false;
+
+        if (!isPowered)
+            return;
+
+        GameObject crate = null;
 
         switch (magRotation)
         {
@@ -218,7 +227,7 @@ public class PlayerController : MonoBehaviour
         string mag = GetAdjMag(gridPos);
         // Right, Up, Left, Down
 
-        if (!isPulling)
+        if (!isPulling && isPowered)
         {
             switch (mag)
             {
