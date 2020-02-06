@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Collision check
-        if (!Physics2D.OverlapPoint(gridPos + direction))
+        if (!Physics2D.OverlapCircle(gridPos + direction, 0.475f))
         {
             if (direction != Vector2.zero)
             {
@@ -119,13 +119,8 @@ public class PlayerController : MonoBehaviour
 
                     if (direction == Vector2.left)
                     {
-                        crate.transform.SetParent(transform);
+                        crate.transform.DOMove(gridPos, 0.1667f);
                         isPulling = true;
-                    }
-                    else
-                    {
-                        crate.transform.SetParent(null);
-                        isPulling = false;
                     }
                 }
                 break;
@@ -137,13 +132,8 @@ public class PlayerController : MonoBehaviour
 
                     if (direction == Vector2.down)
                     {
-                        crate.transform.SetParent(transform);
+                        crate.transform.DOMove(gridPos, 0.1667f);
                         isPulling = true;
-                    }
-                    else
-                    {
-                        crate.transform.SetParent(null);
-                        isPulling = false;
                     }
                 }
                 break;
@@ -155,13 +145,8 @@ public class PlayerController : MonoBehaviour
 
                     if (direction == Vector2.right)
                     {
-                        crate.transform.SetParent(transform);
+                        crate.transform.DOMove(gridPos, 0.1667f);
                         isPulling = true;
-                    }
-                    else
-                    {
-                        crate.transform.SetParent(null);
-                        isPulling = false;
                     }
                 }
                 break;
@@ -173,13 +158,8 @@ public class PlayerController : MonoBehaviour
 
                     if (direction == Vector2.up)
                     {
-                        crate.transform.SetParent(transform);
+                        crate.transform.DOMove(gridPos, 0.1667f);
                         isPulling = true;
-                    }
-                    else
-                    {
-                        crate.transform.SetParent(null);
-                        isPulling = false;
                     }
                 }
                 break;
