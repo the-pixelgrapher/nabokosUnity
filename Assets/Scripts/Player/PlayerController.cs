@@ -25,11 +25,13 @@ public class PlayerController : MonoBehaviour
     public Sprite powerOnSprite;
 
     private InputHandler iman;              // Input handler for input reading
+    private SceneSwitcher scene;
 
     void Start()
     {
         sprite = GetComponent<SpriteRenderer>();
         iman = FindObjectOfType<InputHandler>();
+        scene = FindObjectOfType<SceneSwitcher>();
         SetRotation();
         Tween();
     }
@@ -49,6 +51,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z))
         {
             UndoMove();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            // restart
+            scene.SceneSwitch(GlobalData.curScene);
         }
     }
 
@@ -79,7 +87,10 @@ public class PlayerController : MonoBehaviour
         {
             if (direction != Vector2.zero)
             {
+                // record movement for undo
                 moveRecord.Add(gridPos);
+                moveRecord[moveCount] = gridPos;
+
                 gridPos += direction;
 
                 SetRotation();
@@ -126,10 +137,14 @@ public class PlayerController : MonoBehaviour
 
     private void UndoMove()
     {
-        gridPos = moveRecord[moveCount - 1];
-        magRotation = rotRecord[moveCount - 1];
+        if (moveCount > 0)
+        {
+            gridPos = moveRecord[moveCount - 1];
+            magRotation = rotRecord[moveCount - 1];
+            moveCount--;
 
-        Tween();
+            Tween();
+        }
     }
 
     private void Tween()
@@ -329,7 +344,9 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
+        // Record rotation for undo
         rotRecord.Add(magRotation);
+        rotRecord[moveCount] = magRotation;
     }
 
 }
