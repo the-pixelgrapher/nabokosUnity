@@ -71,6 +71,7 @@ public class SceneSwitcher : MonoBehaviour
             }
             else
             {
+                fadeImage.DOKill(true);
                 SceneManager.LoadScene(targetScene);
                 Debug.Log("Switched from " + curScene + " to " + targetScene);
             }
@@ -103,8 +104,7 @@ public class SceneSwitcher : MonoBehaviour
         if (!isSwitching && !isFading)
         {
             Vector4 initialColor = fadeImage.color;
-            fadeImage.DOKill(true);
-            fadeImage.DOFade(1, fadeTime / 1.0f).SetEase(Ease.InOutSine);
+            fadeImage.DOFade(1, fadeTime).SetEase(Ease.InOutSine);
 
             isSwitching = true;
             fadeTimeCur = fadeTime;
@@ -126,7 +126,6 @@ public class SceneSwitcher : MonoBehaviour
         isSwitching = false;
         fadeTimeCur = fadeTime;
         Vector4 initialColor = fadeImage.color;
-        fadeImage.DOKill(true);
         fadeImage.DOFade(0, fadeTime).SetEase(Ease.InOutSine);
     }
 

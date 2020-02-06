@@ -349,4 +349,9 @@ public class PlayerController : MonoBehaviour
         rotRecord[moveCount] = magRotation;
     }
 
+    private void OnDestroy()
+    {
+        transform.DOKill(true);
+    }
+
 }
