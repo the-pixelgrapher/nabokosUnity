@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
 {
     public Vector2 gridPos;                 // Player position on grid
     public bool isPowered;                  // Is magnet powered on?
+    public int moveCount;
+    private List<Vector2> moveRecord = new List<Vector2>();
 
     public enum Rot
     {
@@ -16,18 +18,22 @@ public class PlayerController : MonoBehaviour
         Down
     }
     public Rot magRotation;
+    private List<Rot> rotRecord = new List<Rot>();
 
     private SpriteRenderer sprite;          // Player sprite component
     public Sprite powerOffSprite;
     public Sprite powerOnSprite;
 
     private InputHandler iman;              // Input handler for input reading
+    private SceneSwitcher scene;
 
     void Start()
     {
         sprite = GetComponent<SpriteRenderer>();
         iman = FindObjectOfType<InputHandler>();
+        scene = FindObjectOfType<SceneSwitcher>();
         SetRotation();
+        Tween();
     }
 
     void Update()
@@ -42,6 +48,16 @@ public class PlayerController : MonoBehaviour
 
         PlayerMovement();
 
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            UndoMove();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            // restart
+            scene.SceneSwitch(GlobalData.curScene);
+        }
     }
 
     private void PlayerMovement()
@@ -69,14 +85,86 @@ public class PlayerController : MonoBehaviour
         // Collision check
         if (!Physics2D.OverlapPoint(gridPos + direction))
         {
-            gridPos += direction;
-            //transform.position = gridPos;
             if (direction != Vector2.zero)
             {
-                // Tween player to target position
-                transform.DOMove(gridPos, 0.2f);
+                // record movement for undo
+                moveRecord.Add(gridPos);
+                moveRecord[moveCount] = gridPos;
+
+                gridPos += direction;
+
                 SetRotation();
+                MagnetPull();
+                Tween();
+
+                moveCount++;
             }
+        }
+    }
+
+    private void MagnetPull()
+    {
+        switch (magRotation)
+        {
+            case Rot.Right:
+
+                break;
+            case Rot.Up:
+
+                break;
+            case Rot.Left:
+
+                break;
+            case Rot.Down:
+
+                break;
+        }
+    }
+
+    private string GetAdjMag(Vector2 pos)
+    {
+        string magID = "0000";
+        int right = Physics2D.OverlapPoint(pos + Vector2.right, LayerMask.GetMask("Crate")) ? 1: 0;
+        int up = Physics2D.OverlapPoint(pos + Vector2.up, LayerMask.GetMask("Crate")) ? 1 : 0;
+        int left = Physics2D.OverlapPoint(pos + Vector2.left, LayerMask.GetMask("Crate")) ? 1 : 0;
+        int down = Physics2D.OverlapPoint(pos + Vector2.down, LayerMask.GetMask("Crate")) ? 1 : 0;
+
+        magID = right + "" + up + "" + left + "" + down;
+        //Debug.Log(magID);
+
+        return magID;
+    }
+
+    private void UndoMove()
+    {
+        if (moveCount > 0)
+        {
+            gridPos = moveRecord[moveCount - 1];
+            magRotation = rotRecord[moveCount - 1];
+            moveCount--;
+
+            Tween();
+        }
+    }
+
+    private void Tween()
+    {
+        transform.DOMove(gridPos, 0.1667f);
+
+        switch (magRotation)
+        {
+            case Rot.Right:
+                transform.DORotate(new Vector3(0, 0, 0), 0.1667f);
+                break;
+            case Rot.Up:
+                transform.DORotate(new Vector3(0, 0, 90), 0.1667f);
+                break;
+            case Rot.Left:
+                transform.DORotate(new Vector3(0, 0, 180), 0.1667f);
+                break;
+            case Rot.Down:
+                transform.DORotate(new Vector3(0, 0, 270), 0.1667f);
+                break;
         }
     }
 
@@ -256,36 +344,9 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
-        switch (magRotation)
-        {
-            case Rot.Right:
-                transform.DORotate(new Vector3(0, 0, 0), 0.15f);
-                break;
-            case Rot.Up:
-                transform.DORotate(new Vector3(0, 0, 90), 0.15f);
-                break;
-            case Rot.Left:
-                transform.DORotate(new Vector3(0, 0, 180), 0.15f);
-                break;
-            case Rot.Down:
-                transform.DORotate(new Vector3(0, 0, 270), 0.15f);
-                break;
-            default:
-                break;
-        }
+        // Record rotation for undo
+        rotRecord.Add(magRotation);
+        rotRecord[moveCount] = magRotation;
     }
 
-    private string GetAdjMag(Vector2 pos)
-    {
-        string magID = "0000";
-        int right = Physics2D.OverlapPoint(pos + Vector2.right, LayerMask.GetMask("Crate")) ? 1: 0;
-        int up = Physics2D.OverlapPoint(pos + Vector2.up, LayerMask.GetMask("Crate")) ? 1 : 0;
-        int left = Physics2D.OverlapPoint(pos + Vector2.left, LayerMask.GetMask("Crate")) ? 1 : 0;
-        int down = Physics2D.OverlapPoint(pos + Vector2.down, LayerMask.GetMask("Crate")) ? 1 : 0;
-
-        magID = right + "" + up + "" + left + "" + down;
-        Debug.Log(magID);
-
-        return magID;
-    }
 }
