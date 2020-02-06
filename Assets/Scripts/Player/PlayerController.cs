@@ -7,7 +7,9 @@ public class PlayerController : MonoBehaviour
 {
     public Vector2 gridPos;                 // Player position on grid
     public bool isPowered;                  // Is magnet powered on?
+    public bool isPulling;
     public int moveCount;
+    private Vector2 direction;
     private List<Vector2> moveRecord = new List<Vector2>();
 
     public enum Rot
@@ -62,7 +64,7 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerMovement()
     {
-        Vector2 direction = new Vector2(0, 0);
+        direction = new Vector2(0, 0);
 
         // Get directional inputs
         if (iman.InputRead("rightD"))
@@ -91,10 +93,11 @@ public class PlayerController : MonoBehaviour
                 moveRecord.Add(gridPos);
                 moveRecord[moveCount] = gridPos;
 
+                MagnetPull();
                 gridPos += direction;
 
                 SetRotation();
-                MagnetPull();
+                
                 Tween();
 
                 moveCount++;
@@ -104,19 +107,81 @@ public class PlayerController : MonoBehaviour
 
     private void MagnetPull()
     {
+        GameObject crate = null;
+        isPulling = false;
+
         switch (magRotation)
         {
             case Rot.Right:
+                if (Physics2D.OverlapPoint(gridPos + Vector2.right, LayerMask.GetMask("Crate")))
+                {
+                    crate = Physics2D.OverlapPointAll(gridPos + Vector2.right, LayerMask.GetMask("Crate"))[0].gameObject;
 
+                    if (direction == Vector2.left)
+                    {
+                        crate.transform.SetParent(transform);
+                        isPulling = true;
+                    }
+                    else
+                    {
+                        crate.transform.SetParent(null);
+                        isPulling = false;
+                    }
+                }
                 break;
+
             case Rot.Up:
+                if (Physics2D.OverlapPoint(gridPos + Vector2.up, LayerMask.GetMask("Crate")))
+                {
+                    crate = Physics2D.OverlapPointAll(gridPos + Vector2.up, LayerMask.GetMask("Crate"))[0].gameObject;
 
+                    if (direction == Vector2.down)
+                    {
+                        crate.transform.SetParent(transform);
+                        isPulling = true;
+                    }
+                    else
+                    {
+                        crate.transform.SetParent(null);
+                        isPulling = false;
+                    }
+                }
                 break;
+
             case Rot.Left:
+                if (Physics2D.OverlapPoint(gridPos + Vector2.left, LayerMask.GetMask("Crate")))
+                {
+                    crate = Physics2D.OverlapPointAll(gridPos + Vector2.left, LayerMask.GetMask("Crate"))[0].gameObject;
 
+                    if (direction == Vector2.right)
+                    {
+                        crate.transform.SetParent(transform);
+                        isPulling = true;
+                    }
+                    else
+                    {
+                        crate.transform.SetParent(null);
+                        isPulling = false;
+                    }
+                }
                 break;
-            case Rot.Down:
 
+            case Rot.Down:
+                if (Physics2D.OverlapPoint(gridPos + Vector2.down, LayerMask.GetMask("Crate")))
+                {
+                    crate = Physics2D.OverlapPointAll(gridPos + Vector2.down, LayerMask.GetMask("Crate"))[0].gameObject;
+
+                    if (direction == Vector2.up)
+                    {
+                        crate.transform.SetParent(transform);
+                        isPulling = true;
+                    }
+                    else
+                    {
+                        crate.transform.SetParent(null);
+                        isPulling = false;
+                    }
+                }
                 break;
         }
     }
@@ -173,175 +238,178 @@ public class PlayerController : MonoBehaviour
         string mag = GetAdjMag(gridPos);
         // Right, Up, Left, Down
 
-        switch (mag)
+        if (!isPulling)
         {
-            case "0000":
-                break;
+            switch (mag)
+            {
+                case "0000":
+                    break;
 
-            case "1000":
-                switch (magRotation)
-                {
-                    case Rot.Right:
-                        magRotation = Rot.Right;
-                        break;
-                    case Rot.Up:
-                        magRotation = Rot.Right;
-                        break;
-                    case Rot.Left:
-                        magRotation = Rot.Right;
-                        break;
-                    case Rot.Down:
-                        magRotation = Rot.Right;
-                        break;
-                }
-                break;
+                case "1000":
+                    switch (magRotation)
+                    {
+                        case Rot.Right:
+                            magRotation = Rot.Right;
+                            break;
+                        case Rot.Up:
+                            magRotation = Rot.Right;
+                            break;
+                        case Rot.Left:
+                            magRotation = Rot.Right;
+                            break;
+                        case Rot.Down:
+                            magRotation = Rot.Right;
+                            break;
+                    }
+                    break;
 
-            case "0100":
-                switch (magRotation)
-                {
-                    case Rot.Right:
-                        magRotation = Rot.Up;
-                        break;
-                    case Rot.Up:
-                        magRotation = Rot.Up;
-                        break;
-                    case Rot.Left:
-                        magRotation = Rot.Up;
-                        break;
-                    case Rot.Down:
-                        magRotation = Rot.Up;
-                        break;
-                }
-                break;
+                case "0100":
+                    switch (magRotation)
+                    {
+                        case Rot.Right:
+                            magRotation = Rot.Up;
+                            break;
+                        case Rot.Up:
+                            magRotation = Rot.Up;
+                            break;
+                        case Rot.Left:
+                            magRotation = Rot.Up;
+                            break;
+                        case Rot.Down:
+                            magRotation = Rot.Up;
+                            break;
+                    }
+                    break;
 
-            case "0010":
-                switch (magRotation)
-                {
-                    case Rot.Right:
-                        magRotation = Rot.Left;
-                        break;
-                    case Rot.Up:
-                        magRotation = Rot.Left;
-                        break;
-                    case Rot.Left:
-                        magRotation = Rot.Left;
-                        break;
-                    case Rot.Down:
-                        magRotation = Rot.Left;
-                        break;
-                }
-                break;
+                case "0010":
+                    switch (magRotation)
+                    {
+                        case Rot.Right:
+                            magRotation = Rot.Left;
+                            break;
+                        case Rot.Up:
+                            magRotation = Rot.Left;
+                            break;
+                        case Rot.Left:
+                            magRotation = Rot.Left;
+                            break;
+                        case Rot.Down:
+                            magRotation = Rot.Left;
+                            break;
+                    }
+                    break;
 
-            case "0001":
-                switch (magRotation)
-                {
-                    case Rot.Right:
-                        magRotation = Rot.Down;
-                        break;
-                    case Rot.Up:
-                        magRotation = Rot.Down;
-                        break;
-                    case Rot.Left:
-                        magRotation = Rot.Down;
-                        break;
-                    case Rot.Down:
-                        magRotation = Rot.Down;
-                        break;
-                }
-                break;
+                case "0001":
+                    switch (magRotation)
+                    {
+                        case Rot.Right:
+                            magRotation = Rot.Down;
+                            break;
+                        case Rot.Up:
+                            magRotation = Rot.Down;
+                            break;
+                        case Rot.Left:
+                            magRotation = Rot.Down;
+                            break;
+                        case Rot.Down:
+                            magRotation = Rot.Down;
+                            break;
+                    }
+                    break;
 
-            case "1100":
-                switch (magRotation)
-                {
-                    case Rot.Right:
-                        magRotation = Rot.Right;
-                        break;
-                    case Rot.Up:
-                        magRotation = Rot.Up;
-                        break;
-                    case Rot.Left:
-                        magRotation = Rot.Up;
-                        break;
-                    case Rot.Down:
-                        magRotation = Rot.Right;
-                        break;
-                }
-                break;
+                case "1100":
+                    switch (magRotation)
+                    {
+                        case Rot.Right:
+                            magRotation = Rot.Right;
+                            break;
+                        case Rot.Up:
+                            magRotation = Rot.Up;
+                            break;
+                        case Rot.Left:
+                            magRotation = Rot.Up;
+                            break;
+                        case Rot.Down:
+                            magRotation = Rot.Right;
+                            break;
+                    }
+                    break;
 
-            case "0110":
-                switch (magRotation)
-                {
-                    case Rot.Right:
-                        magRotation = Rot.Up;
-                        break;
-                    case Rot.Up:
-                        magRotation = Rot.Up;
-                        break;
-                    case Rot.Left:
-                        magRotation = Rot.Left;
-                        break;
-                    case Rot.Down:
-                        magRotation = Rot.Left;
-                        break;
-                }
-                break;
+                case "0110":
+                    switch (magRotation)
+                    {
+                        case Rot.Right:
+                            magRotation = Rot.Up;
+                            break;
+                        case Rot.Up:
+                            magRotation = Rot.Up;
+                            break;
+                        case Rot.Left:
+                            magRotation = Rot.Left;
+                            break;
+                        case Rot.Down:
+                            magRotation = Rot.Left;
+                            break;
+                    }
+                    break;
 
-            case "0011":
-                switch (magRotation)
-                {
-                    case Rot.Right:
-                        magRotation = Rot.Down;
-                        break;
-                    case Rot.Up:
-                        magRotation = Rot.Left;
-                        break;
-                    case Rot.Left:
-                        magRotation = Rot.Left;
-                        break;
-                    case Rot.Down:
-                        magRotation = Rot.Down;
-                        break;
-                }
-                break;
+                case "0011":
+                    switch (magRotation)
+                    {
+                        case Rot.Right:
+                            magRotation = Rot.Down;
+                            break;
+                        case Rot.Up:
+                            magRotation = Rot.Left;
+                            break;
+                        case Rot.Left:
+                            magRotation = Rot.Left;
+                            break;
+                        case Rot.Down:
+                            magRotation = Rot.Down;
+                            break;
+                    }
+                    break;
 
-            case "1001":
-                switch (magRotation)
-                {
-                    case Rot.Right:
-                        magRotation = Rot.Right;
-                        break;
-                    case Rot.Up:
-                        magRotation = Rot.Right;
-                        break;
-                    case Rot.Left:
-                        magRotation = Rot.Down;
-                        break;
-                    case Rot.Down:
-                        magRotation = Rot.Down;
-                        break;
-                }
-                break;
+                case "1001":
+                    switch (magRotation)
+                    {
+                        case Rot.Right:
+                            magRotation = Rot.Right;
+                            break;
+                        case Rot.Up:
+                            magRotation = Rot.Right;
+                            break;
+                        case Rot.Left:
+                            magRotation = Rot.Down;
+                            break;
+                        case Rot.Down:
+                            magRotation = Rot.Down;
+                            break;
+                    }
+                    break;
 
-            case "1010":
-                break;
+                case "1010":
+                    break;
 
-            case "0101":
-                break;
+                case "0101":
+                    break;
 
-            case "1101":
-                break;
+                case "1101":
+                    break;
 
-            case "1110":
-                break;
+                case "1110":
+                    break;
 
-            case "0111":
-                break;
+                case "0111":
+                    break;
 
-            case "1011":
-                break;
+                case "1011":
+                    break;
 
-            case "1111":
-                break;
+                case "1111":
+                    break;
+            }
         }
 
         // Record rotation for undo
