@@ -298,6 +298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 080a75c74207a5849b24296ecc59682b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridPos: {x: 0, y: 0}
   isPowered: 0
   powerOffSprite: {fileID: 21300000, guid: 4428237d0b8ec9f48825733c4e57c762, type: 3}
   powerOnSprite: {fileID: 21300000, guid: 42c3a334cf8d14a4a848af3009790ac6, type: 3}
@@ -330,6 +331,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 798103dd614bbf04c994fdc0d82b1088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  repeatDelay: 0.5
+  repeatGap: 0.1
 --- !u!4 &2100002292
 Transform:
   m_ObjectHideFlags: 0
