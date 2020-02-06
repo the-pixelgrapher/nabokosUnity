@@ -59,12 +59,14 @@ public class PlayerController : MonoBehaviour
             direction = Vector2.down;
         }
 
-        gridPos += direction;
-
-        //transform.position = gridPos;
-        if (direction != Vector2.zero)
+        if (!Physics2D.OverlapCircle(gridPos + direction, 0.1f))
         {
-            transform.DOMove(gridPos, 0.2f);
+            gridPos += direction;
+            //transform.position = gridPos;
+            if (direction != Vector2.zero)
+            {
+                transform.DOMove(gridPos, 0.2f);
+            }
         }
     }
 }
