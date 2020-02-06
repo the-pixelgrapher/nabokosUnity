@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class InputHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public float repeatDelay = 0.5f;
+    public float repeatGap = 0.1f;
+
+    private float rightTimer;
+    private float upTimer;
+    private float leftTimer;
+    private float downTimer;
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
 
