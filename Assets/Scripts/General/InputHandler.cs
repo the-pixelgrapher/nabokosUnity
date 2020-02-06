@@ -12,13 +12,11 @@ public class InputHandler : MonoBehaviour
     private float leftTimer;
     private float downTimer;
 
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
 
