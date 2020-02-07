@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public Vector2 gridPos;                 // Player position on grid
     public bool isPowered;                  // Is magnet powered on?
     public int moveCount;
+    public LayerMask solidLayers;
     private bool isPulling;
     private Vector2 direction;
 
@@ -90,7 +91,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Collision check
-        if (!Physics2D.OverlapCircle(gridPos + direction, 0.475f))
+        if (!Physics2D.OverlapCircle(gridPos + direction, 0.475f, solidLayers))
         {
             if (direction != Vector2.zero)
             {
@@ -175,20 +176,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private string GetAdjMag(Vector2 pos)
-    {
-        string magID = "0000";
-        int right = Physics2D.OverlapPoint(pos + Vector2.right, LayerMask.GetMask("Crate")) ? 1: 0;
-        int up = Physics2D.OverlapPoint(pos + Vector2.up, LayerMask.GetMask("Crate")) ? 1 : 0;
-        int left = Physics2D.OverlapPoint(pos + Vector2.left, LayerMask.GetMask("Crate")) ? 1 : 0;
-        int down = Physics2D.OverlapPoint(pos + Vector2.down, LayerMask.GetMask("Crate")) ? 1 : 0;
-
-        magID = right + "" + up + "" + left + "" + down;
-        //Debug.Log(magID);
-
-        return magID;
-    }
-
     private void UndoMove()
     {
         if (moveCount > 0)
@@ -224,7 +211,7 @@ public class PlayerController : MonoBehaviour
 
     private void SetRotation()
     {
-        string mag = GetAdjMag(gridPos);
+        string mag = GlobalData.GetAdj(gridPos, "Crate");
         // Right, Up, Left, Down
 
         if (!isPulling && isPowered)
