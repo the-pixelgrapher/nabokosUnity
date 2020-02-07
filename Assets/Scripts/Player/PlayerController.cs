@@ -7,10 +7,9 @@ public class PlayerController : MonoBehaviour
 {
     public Vector2 gridPos;                 // Player position on grid
     public bool isPowered;                  // Is magnet powered on?
-    public bool isPulling;
     public int moveCount;
-    public Vector2 direction;
-    private List<Vector2> moveRecord = new List<Vector2>();
+    private bool isPulling;
+    private Vector2 direction;
 
     public enum Rot
     {
@@ -21,6 +20,7 @@ public class PlayerController : MonoBehaviour
     }
     public Rot magRotation;
     private List<Rot> rotRecord = new List<Rot>();
+    private List<Vector2> moveRecord = new List<Vector2>();
 
     private SpriteRenderer sprite;          // Player sprite component
     public Sprite powerOffSprite;
