@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Wire : MonoBehaviour
 {
+    public bool isPowered;
+    public int depth;
     private Vector2 gridPos;
     private string id;
-    public bool isPowered;
 
     private SpriteRenderer sprite;
     public Sprite powerOffSprite;
@@ -17,14 +18,27 @@ public class Wire : MonoBehaviour
         gridPos = transform.position;
         id = GlobalData.GetAdj(gridPos, "Wire");
         sprite = GetComponent<SpriteRenderer>();
+        depth = 100;
     }
 
     void Update()
     {
+        sprite.sprite = isPowered ? powerOnSprite : powerOffSprite;
+
         isPowered = false;
+
         CheckPower();
 
-        sprite.sprite = isPowered ? powerOnSprite : powerOffSprite;
+        if (!isPowered)
+        {
+            depth = 100;
+        }
+    }
+
+    private void LateUpdate()
+    {
+
+
     }
 
     private void CheckPower()
@@ -45,6 +59,13 @@ public class Wire : MonoBehaviour
             {
                 if (Physics2D.OverlapPoint(gridPos + dir[i] * j, LayerMask.GetMask("Wire")))
                 {
+                    var wire = Physics2D.OverlapPointAll(gridPos + dir[i] * j, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>();
+                    if (wire.isPowered && wire.depth < depth)
+                    {
+                        isPowered = true;
+                        depth = wire.depth + 1;
+                    }
+
                     j++;
                 }
                 else if (Physics2D.OverlapPoint(gridPos + dir[i] * j, LayerMask.GetMask("Crate")))
@@ -52,6 +73,7 @@ public class Wire : MonoBehaviour
                     var source = Physics2D.OverlapPointAll(gridPos + dir[i] * j, LayerMask.GetMask("Crate"))[0];
                     isPowered = true;
                     sourceFound = true;
+                    depth = j;
                 }
                 else
                 {
