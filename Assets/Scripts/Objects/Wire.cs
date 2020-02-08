@@ -5,10 +5,9 @@ using UnityEngine;
 public class Wire : MonoBehaviour
 {
     public bool isPowered;
-    public bool isDirectSource;
+    public int depth;
     private Vector2 gridPos;
     private string id;
-    private int maxRecursions;
 
     private SpriteRenderer sprite;
     public Sprite powerOffSprite;
@@ -19,6 +18,7 @@ public class Wire : MonoBehaviour
         gridPos = transform.position;
         id = GlobalData.GetAdj(gridPos, "Wire");
         sprite = GetComponent<SpriteRenderer>();
+        depth = 100;
     }
 
     void Update()
@@ -26,9 +26,13 @@ public class Wire : MonoBehaviour
         sprite.sprite = isPowered ? powerOnSprite : powerOffSprite;
 
         isPowered = false;
-        isDirectSource = false;
 
         CheckPower();
+
+        if (!isPowered)
+        {
+            depth = 100;
+        }
     }
 
     private void LateUpdate()
@@ -56,10 +60,10 @@ public class Wire : MonoBehaviour
                 if (Physics2D.OverlapPoint(gridPos + dir[i] * j, LayerMask.GetMask("Wire")))
                 {
                     var wire = Physics2D.OverlapPointAll(gridPos + dir[i] * j, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>();
-                    if (wire.isPowered && wire.isDirectSource)
+                    if (wire.isPowered && wire.depth < depth)
                     {
                         isPowered = true;
-                        //sourceFound = true;
+                        depth = wire.depth + 1;
                     }
 
                     j++;
@@ -69,11 +73,10 @@ public class Wire : MonoBehaviour
                     var source = Physics2D.OverlapPointAll(gridPos + dir[i] * j, LayerMask.GetMask("Crate"))[0];
                     isPowered = true;
                     sourceFound = true;
-                    isDirectSource = true;
+                    depth = j;
                 }
                 else
                 {
-                    //isDirectSource = false;
                     wireEnd = true;
                 }
 
