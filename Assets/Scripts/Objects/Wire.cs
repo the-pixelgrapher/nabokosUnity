@@ -18,20 +18,19 @@ public class Wire : MonoBehaviour
         gridPos = transform.position;
         id = GlobalData.GetAdj(gridPos, "Wire");
         sprite = GetComponent<SpriteRenderer>();
-        depth = 100;
+        depth = 63;
     }
 
     void Update()
     {
-        sprite.sprite = isPowered ? powerOnSprite : powerOffSprite;
-
         isPowered = false;
-
+        depth = 63;
         CheckPower();
+        sprite.sprite = isPowered ? powerOnSprite : powerOffSprite;
 
         if (!isPowered)
         {
-            depth = 100;
+            //depth = 63;
         }
     }
 
@@ -60,10 +59,11 @@ public class Wire : MonoBehaviour
                 if (Physics2D.OverlapPoint(gridPos + dir[i] * j, LayerMask.GetMask("Wire")))
                 {
                     var wire = Physics2D.OverlapPointAll(gridPos + dir[i] * j, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>();
-                    if (wire.isPowered && wire.depth < depth)
+                    if (wire.depth != 63 && wire.depth < depth)
                     {
                         isPowered = true;
-                        depth = wire.depth + 1;
+                        depth = wire.depth + j;
+                        sourceFound = true;
                     }
 
                     j++;
@@ -76,7 +76,7 @@ public class Wire : MonoBehaviour
                     depth = j;
                 }
                 else
-                {
+                {   
                     wireEnd = true;
                 }
 
