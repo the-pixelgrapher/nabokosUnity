@@ -21,8 +21,8 @@ public class LogicGate : MonoBehaviour
     private bool inputsFound;
     private Transform aTrans;
     private Transform bTrans;
-    private Wire a;
-    private Wire b;
+    private PowerSource a;
+    private PowerSource b;
 
     void Start()
     {
@@ -36,7 +36,7 @@ public class LogicGate : MonoBehaviour
     }
 
 
-    void Update()
+    void LateUpdate()
     {
         gridPos = transform.position;
 
@@ -59,12 +59,21 @@ public class LogicGate : MonoBehaviour
 
     void UpdateInputs()
     {
+
         if (Physics2D.OverlapPoint(aTrans.position, LayerMask.GetMask("Wire")) && Physics2D.OverlapPoint(bTrans.position, LayerMask.GetMask("Wire")))
         {
-            a = Physics2D.OverlapPointAll(aTrans.position, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>();
-            b = Physics2D.OverlapPointAll(bTrans.position, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>();
+            a = Physics2D.OverlapPointAll(aTrans.position, LayerMask.GetMask("Wire"))[0].GetComponent<PowerSource>();
+            b = Physics2D.OverlapPointAll(bTrans.position, LayerMask.GetMask("Wire"))[0].GetComponent<PowerSource>();
 
             inputsFound = true;
         }
+        else if (Physics2D.OverlapPoint(aTrans.position, LayerMask.GetMask("Power")) && Physics2D.OverlapPoint(bTrans.position, LayerMask.GetMask("Power")))
+        {
+            a = Physics2D.OverlapPointAll(aTrans.position, LayerMask.GetMask("Power"))[0].GetComponent<PowerSource>();
+            b = Physics2D.OverlapPointAll(bTrans.position, LayerMask.GetMask("Power"))[0].GetComponent<PowerSource>();
+
+            inputsFound = true;
+        }
+
     }
 }
