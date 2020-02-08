@@ -29,14 +29,14 @@ public class PlayerController : MonoBehaviour
 
     private InputHandler iman;              // Input handler for input reading
     private SceneSwitcher scene;
-    private AudioManager audio;
+    private AudioManager aud;
 
     void Start()
     {
         sprite = GetComponent<SpriteRenderer>();
         iman = FindObjectOfType<InputHandler>();
         scene = FindObjectOfType<SceneSwitcher>();
-        audio = FindObjectOfType<AudioManager>();
+        aud = FindObjectOfType<AudioManager>();
         SetRotation();
         Tween();
     }
@@ -51,9 +51,9 @@ public class PlayerController : MonoBehaviour
             {
                 SetRotation();
                 Tween();
-                audio.Play("Power");
+                aud.Play("Power");
             }
-            audio.Play("Switch");
+            aud.Play("Switch");
         }
 
         sprite.sprite = isPowered ? powerOnSprite : powerOffSprite;
@@ -107,8 +107,9 @@ public class PlayerController : MonoBehaviour
                 gridPos += direction;
 
                 SetRotation();
-                
                 Tween();
+
+                aud.Play("Move");
 
                 moveCount++;
             }

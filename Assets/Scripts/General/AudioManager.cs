@@ -44,6 +44,8 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning("Sound / SFX" + name + " Missing!");
             return;
         }
+
+        i.source.pitch = i.pit + Random.Range(-0.1f, 0.1f);
         i.source.Play();
     }
 
