@@ -35,12 +35,6 @@ public class Wire : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
-    {
-
-
-    }
-
     private void CheckPower()
     {
         Vector2[] dir = new Vector2[4];
@@ -61,8 +55,8 @@ public class Wire : MonoBehaviour
                 {
                     bool source = Physics2D.OverlapPointAll(gridPos + dir[i] * j, LayerMask.GetMask("Power", "Crate"))[0].GetComponent<PowerSource>().isPowered;
                     isPowered = source;
-                    sourceFound = true;
                     depth = j;
+                    sourceFound = true;
                 }
                 else if (Physics2D.OverlapPoint(gridPos + dir[i] * j, LayerMask.GetMask("Wire")))
                 {
@@ -73,14 +67,13 @@ public class Wire : MonoBehaviour
                         depth = wire.depth + j;
                         sourceFound = true;
                     }
-
                 }
                 else
                 {   
                     wireEnd = true;
                 }
-                j++;
 
+                j++;
             }
         }
     }

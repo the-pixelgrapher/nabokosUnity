@@ -20,8 +20,8 @@ public class LogicGate : MonoBehaviour
 
     private Transform aTrans;
     private Transform bTrans;
-    private bool a;
-    private bool b;
+    private Wire a;
+    private Wire b;
 
     void Start()
     {
@@ -30,6 +30,8 @@ public class LogicGate : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         aTrans = transform.Find("InputA");
         bTrans = transform.Find("InputB");
+
+        UpdateInputs();
     }
 
 
@@ -37,26 +39,26 @@ public class LogicGate : MonoBehaviour
     {
         gridPos = transform.position;
 
-
         switch (gate)
         {
             case GateType.AND:
-                if (Physics2D.OverlapPoint(aTrans.position, LayerMask.GetMask("Wire")) && Physics2D.OverlapPoint(bTrans.position, LayerMask.GetMask("Wire")))
-                {
-                    a = Physics2D.OverlapPointAll(aTrans.position, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>().isPowered;
-                    b = Physics2D.OverlapPointAll(bTrans.position, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>().isPowered;
-
-                    power.isPowered = (a && b) ? true : false;
-                }
+                power.isPowered = (a.isPowered && b.isPowered) ? true : false;
                 break;
+
             case GateType.XOR:
-
-                break;
-
-            default:
+                power.isPowered = (a.isPowered ^ b.isPowered) ? true : false;
                 break;
         }
 
         sprite.sprite = power.isPowered ? powerOnSprite : powerOffSprite;
+    }
+
+    void UpdateInputs()
+    {
+        if (Physics2D.OverlapPoint(aTrans.position, LayerMask.GetMask("Wire")) && Physics2D.OverlapPoint(bTrans.position, LayerMask.GetMask("Wire")))
+        {
+            a = Physics2D.OverlapPointAll(aTrans.position, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>();
+            b = Physics2D.OverlapPointAll(bTrans.position, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>();
+        }
     }
 }
