@@ -18,20 +18,20 @@ public class Wire : MonoBehaviour
         gridPos = transform.position;
         id = GlobalData.GetAdj(gridPos, "Wire");
         sprite = GetComponent<SpriteRenderer>();
-        depth = 100;
+        depth = 63;
     }
 
     void Update()
     {
-        sprite.sprite = isPowered ? powerOnSprite : powerOffSprite;
-
+        gridPos = transform.position;
         isPowered = false;
-
+        depth = 63;
         CheckPower();
+        sprite.sprite = isPowered ? powerOnSprite : powerOffSprite;
 
         if (!isPowered)
         {
-            depth = 100;
+            //depth = 63;
         }
     }
 
@@ -57,28 +57,29 @@ public class Wire : MonoBehaviour
 
             while (!wireEnd && !sourceFound)
             {
-                if (Physics2D.OverlapPoint(gridPos + dir[i] * j, LayerMask.GetMask("Wire")))
+                if (Physics2D.OverlapPoint(gridPos + dir[i] * j, LayerMask.GetMask("Power", "Crate")))
                 {
-                    var wire = Physics2D.OverlapPointAll(gridPos + dir[i] * j, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>();
-                    if (wire.isPowered && wire.depth < depth)
-                    {
-                        isPowered = true;
-                        depth = wire.depth + 1;
-                    }
-
-                    j++;
-                }
-                else if (Physics2D.OverlapPoint(gridPos + dir[i] * j, LayerMask.GetMask("Crate")))
-                {
-                    var source = Physics2D.OverlapPointAll(gridPos + dir[i] * j, LayerMask.GetMask("Crate"))[0];
-                    isPowered = true;
+                    bool source = Physics2D.OverlapPointAll(gridPos + dir[i] * j, LayerMask.GetMask("Power", "Crate"))[0].GetComponent<PowerSource>().isPowered;
+                    isPowered = source;
                     sourceFound = true;
                     depth = j;
                 }
-                else
+                else if (Physics2D.OverlapPoint(gridPos + dir[i] * j, LayerMask.GetMask("Wire")))
                 {
+                    var wire = Physics2D.OverlapPointAll(gridPos + dir[i] * j, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>();
+                    if (wire.depth != 63 && wire.depth < depth)
+                    {
+                        isPowered = wire.isPowered;
+                        depth = wire.depth + j;
+                        sourceFound = true;
+                    }
+
+                }
+                else
+                {   
                     wireEnd = true;
                 }
+                j++;
 
             }
         }
