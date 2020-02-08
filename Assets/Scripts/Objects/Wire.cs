@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Wire : MonoBehaviour
 {
-    public bool isPowered;
+    //public bool isPowered;
     public int depth;
     private int maxDepth = 32;
     private Vector2 gridPos;
     private string id;
+    private PowerSource power;
 
     private SpriteRenderer sprite;
     public Sprite powerOffSprite;
@@ -16,24 +17,22 @@ public class Wire : MonoBehaviour
 
     void Start()
     {
+        depth = 63;
         gridPos = transform.position;
         id = GlobalData.GetAdj(gridPos, "Wire");
         sprite = GetComponent<SpriteRenderer>();
-        depth = 63;
+        power = GetComponent<PowerSource>();
     }
 
     void Update()
     {
         gridPos = transform.position;
-        isPowered = false;
+        //isPowered = false;
+        power.isPowered = false;
         depth = maxDepth;
         CheckPower();
-        sprite.sprite = isPowered ? powerOnSprite : powerOffSprite;
+        sprite.sprite = power.isPowered ? powerOnSprite : powerOffSprite;
 
-        if (!isPowered)
-        {
-            //depth = 63;
-        }
     }
 
     private void CheckPower()
@@ -55,16 +54,17 @@ public class Wire : MonoBehaviour
                 if (Physics2D.OverlapPoint(gridPos + dir[i] * j, LayerMask.GetMask("Power")))
                 {
                     bool source = Physics2D.OverlapPointAll(gridPos + dir[i] * j, LayerMask.GetMask("Power"))[0].GetComponent<PowerSource>().isPowered;
-                    isPowered = source;
+                    power.isPowered = source;
                     depth = j;
                     sourceFound = true;
                 }
                 else if (Physics2D.OverlapPoint(gridPos + dir[i] * j, LayerMask.GetMask("Wire")))
                 {
                     var wire = Physics2D.OverlapPointAll(gridPos + dir[i] * j, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>();
+                    var source = Physics2D.OverlapPointAll(gridPos + dir[i] * j, LayerMask.GetMask("Wire"))[0].GetComponent<PowerSource>();
                     if (wire.depth != maxDepth && wire.depth < depth)
                     {
-                        isPowered = wire.isPowered;
+                        power.isPowered = source.isPowered;
                         depth = wire.depth + j;
                         sourceFound = true;
                     }

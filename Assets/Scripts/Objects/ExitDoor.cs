@@ -10,7 +10,7 @@ public class ExitDoor : MonoBehaviour
     public bool isPowered;
 
     private bool sourceFound;
-    private Wire source;
+    private PowerSource source;
     private Transform inputTrans;
 
     private GameObject door;
@@ -38,14 +38,14 @@ public class ExitDoor : MonoBehaviour
         if (isPowered && !doorOpen)
         {
             // Tween open
-            door.transform.DOLocalMoveY(1.0f, 0.1667f);
+            door.transform.DOLocalMoveY(1.0f, 0.3333f).SetEase(Ease.OutQuint);
             doorOpen = true;
         }
 
         if (!isPowered && doorOpen)
         {
             // Tween closed
-            door.transform.DOLocalMoveY(0.0f, 0.1667f);
+            door.transform.DOLocalMoveY(0.0f, 0.3333f).SetEase(Ease.OutQuint);
             doorOpen = false;
         }
     }
@@ -54,7 +54,7 @@ public class ExitDoor : MonoBehaviour
     {
         if (Physics2D.OverlapPoint(inputTrans.position, LayerMask.GetMask("Wire")) )
         {
-            source = Physics2D.OverlapPointAll(inputTrans.position, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>();
+            source = Physics2D.OverlapPointAll(inputTrans.position, LayerMask.GetMask("Wire"))[0].GetComponent<PowerSource>();
             sourceFound = true;
         }
     }
