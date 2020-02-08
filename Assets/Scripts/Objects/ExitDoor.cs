@@ -16,12 +16,15 @@ public class ExitDoor : MonoBehaviour
     private GameObject door;
     private bool doorOpen;
 
+    private AudioManager aud;
+
     void Start()
     {
         coll = GetComponent<Collider2D>();
         gridPos = transform.position;
         inputTrans = transform.Find("Input");
         door = transform.Find("ExitDoor").gameObject;
+        aud = FindObjectOfType<AudioManager>();
 
         UpdateInputs();
     }
@@ -40,6 +43,7 @@ public class ExitDoor : MonoBehaviour
             // Tween open
             door.transform.DOLocalMoveY(1.0f, 0.3333f).SetEase(Ease.OutQuint);
             doorOpen = true;
+            aud.Play("Door");
         }
 
         if (!isPowered && doorOpen)
@@ -47,6 +51,7 @@ public class ExitDoor : MonoBehaviour
             // Tween closed
             door.transform.DOLocalMoveY(0.0f, 0.3333f).SetEase(Ease.OutQuint);
             doorOpen = false;
+            aud.Play("Door");
         }
     }
 

@@ -24,6 +24,9 @@ public class LogicGate : MonoBehaviour
     private PowerSource a;
     private PowerSource b;
 
+    private AudioManager aud;
+    private bool powerSoundPlayed;
+
     void Start()
     {
         power = GetComponent<PowerSource>();
@@ -31,6 +34,7 @@ public class LogicGate : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         aTrans = transform.Find("InputA");
         bTrans = transform.Find("InputB");
+        aud = FindObjectOfType<AudioManager>();
 
         UpdateInputs();
     }
@@ -52,6 +56,19 @@ public class LogicGate : MonoBehaviour
                     power.isPowered = (a.isPowered ^ b.isPowered) ? true : false;
                     break;
             }
+        }
+
+        if (power.isPowered && !powerSoundPlayed)
+        {
+            aud.Play("Power");
+            aud.Play("Switch");
+            powerSoundPlayed = true;
+        }
+
+        if (!power.isPowered && powerSoundPlayed)
+        {
+            aud.Play("Switch");
+            powerSoundPlayed = false;
         }
 
         sprite.sprite = power.isPowered ? powerOnSprite : powerOffSprite;
