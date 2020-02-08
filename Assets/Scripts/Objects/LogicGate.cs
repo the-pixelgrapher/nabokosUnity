@@ -18,6 +18,7 @@ public class LogicGate : MonoBehaviour
     public Sprite powerOffSprite;
     public Sprite powerOnSprite;
 
+    private bool inputsFound;
     private Transform aTrans;
     private Transform bTrans;
     private Wire a;
@@ -39,15 +40,18 @@ public class LogicGate : MonoBehaviour
     {
         gridPos = transform.position;
 
-        switch (gate)
+        if (inputsFound)
         {
-            case GateType.AND:
-                power.isPowered = (a.isPowered && b.isPowered) ? true : false;
-                break;
+            switch (gate)
+            {
+                case GateType.AND:
+                    power.isPowered = (a.isPowered && b.isPowered) ? true : false;
+                    break;
 
-            case GateType.XOR:
-                power.isPowered = (a.isPowered ^ b.isPowered) ? true : false;
-                break;
+                case GateType.XOR:
+                    power.isPowered = (a.isPowered ^ b.isPowered) ? true : false;
+                    break;
+            }
         }
 
         sprite.sprite = power.isPowered ? powerOnSprite : powerOffSprite;
@@ -59,6 +63,8 @@ public class LogicGate : MonoBehaviour
         {
             a = Physics2D.OverlapPointAll(aTrans.position, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>();
             b = Physics2D.OverlapPointAll(bTrans.position, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>();
+
+            inputsFound = true;
         }
     }
 }
