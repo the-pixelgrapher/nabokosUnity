@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviour
 
                     if (direction == Vector2.left)
                     {
-                        crate.transform.DOMove(gridPos, 0.1667f);
+                        crate.transform.DOMoveX(gridPos.x, 0.1667f);
                         isPulling = true;
                     }
                 }
@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour
 
                     if (direction == Vector2.down)
                     {
-                        crate.transform.DOMove(gridPos, 0.1667f);
+                        crate.transform.DOMoveY(gridPos.y, 0.1667f);
                         isPulling = true;
                     }
                 }
@@ -155,7 +155,7 @@ public class PlayerController : MonoBehaviour
 
                     if (direction == Vector2.right)
                     {
-                        crate.transform.DOMove(gridPos, 0.1667f);
+                        crate.transform.DOMoveX(gridPos.x, 0.1667f);
                         isPulling = true;
                     }
                 }
@@ -168,7 +168,7 @@ public class PlayerController : MonoBehaviour
 
                     if (direction == Vector2.up)
                     {
-                        crate.transform.DOMove(gridPos, 0.1667f);
+                        crate.transform.DOMoveY(gridPos.y, 0.1667f);
                         isPulling = true;
                     }
                 }
