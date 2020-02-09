@@ -1013,25 +1013,43 @@ MonoBehaviour:
   - name: Switch
     Clip: {fileID: 8300000, guid: fb8a8c0aa8bd3f547a5dea0221526b81, type: 3}
     vol: 0.4
-    pit: 1
+    pitch: 1
+    randomPitch: 1
     loop: 0
     source: {fileID: 0}
   - name: Power
     Clip: {fileID: 8300000, guid: e140808fdcda8824c905f0419bbfda87, type: 3}
     vol: 0.15
-    pit: 1
+    pitch: 1
+    randomPitch: 1
     loop: 0
     source: {fileID: 0}
   - name: Door
     Clip: {fileID: 8300000, guid: 6ab0098ae218b934483c80b723b50e24, type: 3}
     vol: 0.65
-    pit: 1
+    pitch: 1
+    randomPitch: 1
     loop: 0
     source: {fileID: 0}
   - name: Move
     Clip: {fileID: 8300000, guid: efadea2cef882614fa324fad365dc306, type: 3}
     vol: 0.3
-    pit: 1.1
+    pitch: 1.1
+    randomPitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Win
+    Clip: {fileID: 8300000, guid: 5b666964b288c3949b48c1575128a864, type: 3}
+    vol: 0.67
+    pitch: 1
+    randomPitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: Swoosh
+    Clip: {fileID: 8300000, guid: 75510a5c78f2b014799fb766bcd414c9, type: 3}
+    vol: 0.3
+    pitch: 1
+    randomPitch: 0
     loop: 0
     source: {fileID: 0}
 --- !u!4 &503468940
@@ -3770,6 +3788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fd4adfe2dd838e4b914444ae16ad273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  level: 0
   levelComplete: 0
 --- !u!1001 &544174540239263138
 PrefabInstance:

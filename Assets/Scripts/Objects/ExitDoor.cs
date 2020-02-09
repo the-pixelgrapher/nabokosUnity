@@ -60,6 +60,7 @@ public class ExitDoor : MonoBehaviour
         {
             if (Physics2D.OverlapPoint(gridPos, LayerMask.GetMask("Player")))
             {
+                aud.Play("Win");
                 game.levelComplete = true;
             }
         }
