@@ -11,7 +11,8 @@ public class Sound
     [Range(0.0f, 1f)]
     public float vol;
     [Range(.1f, 3f)]
-    public float pit;
+    public float pitch;
+    public bool randomPitch;
     public bool loop;
 
     [HideInInspector]
