@@ -16,6 +16,7 @@ public class ExitDoor : MonoBehaviour
     private GameObject door;
     private bool doorOpen;
 
+    private GameManager game;
     private AudioManager aud;
 
     void Start()
@@ -24,6 +25,7 @@ public class ExitDoor : MonoBehaviour
         gridPos = transform.position;
         inputTrans = transform.Find("Input");
         door = transform.Find("ExitDoor").gameObject;
+        game = FindObjectOfType<GameManager>();
         aud = FindObjectOfType<AudioManager>();
 
         UpdateInputs();
@@ -53,6 +55,14 @@ public class ExitDoor : MonoBehaviour
             doorOpen = false;
             aud.Play("Door");
         }
+
+        if (isPowered && !game.levelComplete)
+        {
+            if (Physics2D.OverlapPoint(gridPos, LayerMask.GetMask("Player")))
+            {
+                game.levelComplete = true;
+            }
+        }
     }
 
     void UpdateInputs()
@@ -63,4 +73,5 @@ public class ExitDoor : MonoBehaviour
             sourceFound = true;
         }
     }
+
 }
