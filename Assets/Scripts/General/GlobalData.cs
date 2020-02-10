@@ -4,6 +4,7 @@ using UnityEngine;
 public class GlobalData
 {
     public static string curScene;
+    public static bool musicStarted;
 
     public static string GetAdj(Vector2 pos, string layer)
     {

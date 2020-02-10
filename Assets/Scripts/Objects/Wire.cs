@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class Wire : MonoBehaviour
 {
@@ -77,5 +78,10 @@ public class Wire : MonoBehaviour
                 j++;
             }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        //Handles.Label(transform.position, depth.ToString());
     }
 }
