@@ -56,8 +56,8 @@ public class Wire : MonoBehaviour
                 {
                     bool source = Physics2D.OverlapPointAll(gridPos + dir[i] * j, LayerMask.GetMask("Power"))[0].GetComponent<PowerSource>().isPowered;
                     power.isPowered = source;
-                    depth = j;
                     sourceFound = true;
+                    depth = j;
                 }
                 else if (Physics2D.OverlapPoint(gridPos + dir[i] * j, LayerMask.GetMask("Wire")))
                 {
@@ -66,8 +66,8 @@ public class Wire : MonoBehaviour
                     if (wire.depth != maxDepth && wire.depth < depth)
                     {
                         power.isPowered = source.isPowered;
+                        sourceFound = source.isPowered;
                         depth = wire.depth + j;
-                        sourceFound = true;
                     }
                 }
                 else

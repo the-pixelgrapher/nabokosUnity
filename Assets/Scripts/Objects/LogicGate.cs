@@ -23,6 +23,7 @@ public class LogicGate : MonoBehaviour
     private Transform bTrans;
     private PowerSource a;
     private PowerSource b;
+    private Collider2D coll;
 
     private AudioManager aud;
     private bool powerSoundPlayed;
@@ -34,6 +35,7 @@ public class LogicGate : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         aTrans = transform.Find("InputA");
         bTrans = transform.Find("InputB");
+        coll = GetComponent<Collider2D>();
         aud = FindObjectOfType<AudioManager>();
 
         UpdateInputs();
@@ -71,6 +73,7 @@ public class LogicGate : MonoBehaviour
             powerSoundPlayed = false;
         }
 
+        coll.enabled = power.isPowered ? true : false;
         sprite.sprite = power.isPowered ? powerOnSprite : powerOffSprite;
     }
 
