@@ -10,10 +10,13 @@ public class PowerPad : MonoBehaviour
     private bool sourceFound;
     private PowerSource source;
 
+    private Collider2D coll;
+
     void Start()
     {
         power = GetComponent<PowerSource>();
         gridPos = transform.position;
+        coll = GetComponent<Collider2D>();
     }
 
 
@@ -34,6 +37,6 @@ public class PowerPad : MonoBehaviour
         }
 
         power.isPowered = (sourceFound) ? true : false;
-        
+        coll.enabled = (sourceFound) ? true : false;
     }
 }

@@ -82,6 +82,6 @@ public class Wire : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        //Handles.Label(transform.position, depth.ToString());
+        Handles.Label(transform.position, depth.ToString());
     }
 }
