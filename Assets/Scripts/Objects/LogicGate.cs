@@ -73,7 +73,7 @@ public class LogicGate : MonoBehaviour
             powerSoundPlayed = false;
         }
 
-        coll.enabled = power.isPowered ? true : false;
+        //coll.enabled = power.isPowered ? true : false;
         sprite.sprite = power.isPowered ? powerOnSprite : powerOffSprite;
     }
 

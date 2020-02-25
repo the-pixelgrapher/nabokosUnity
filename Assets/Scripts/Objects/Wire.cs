@@ -25,7 +25,7 @@ public class Wire : MonoBehaviour
         power = GetComponent<PowerSource>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         gridPos = transform.position;
         //isPowered = false;
@@ -38,11 +38,33 @@ public class Wire : MonoBehaviour
 
     private void CheckPower()
     {
+
+        if (GameObject.FindWithTag("Power") == null)
+            return;
+
+
+        GameObject[] sources = GameObject.FindGameObjectsWithTag("Power");
+        int sourcesFound = 0;
+
+        for (int i = 0; i < sources.Length; i++)
+        {
+            if (sources[i].GetComponent<PowerSource>().isPowered)
+            {
+                sourcesFound++;
+            }
+        }
+
+        if (sourcesFound == 0)
+            return;
+
+
+
         Vector2[] dir = new Vector2[4];
         dir[0] = Vector2.right;
         dir[1] = Vector2.up;
         dir[2] = Vector2.left;
         dir[3] = Vector2.down;
+
 
         for (int i = 0; i < dir.Length; i++)
         {
@@ -50,7 +72,10 @@ public class Wire : MonoBehaviour
             bool sourceFound = false;
             int j = 0;
 
-            while (!wireEnd && !sourceFound)
+            if (j > maxDepth)
+                return;
+
+            while (!wireEnd && !sourceFound && j <= maxDepth)
             {
                 if (Physics2D.OverlapPoint(gridPos + dir[i] * j, LayerMask.GetMask("Power")))
                 {
@@ -76,12 +101,17 @@ public class Wire : MonoBehaviour
                 }
 
                 j++;
+
             }
+
         }
+
     }
+
+
 
     private void OnDrawGizmos()
     {
-        Handles.Label(transform.position, depth.ToString());
+        //Handles.Label(transform.position, depth.ToString());
     }
 }

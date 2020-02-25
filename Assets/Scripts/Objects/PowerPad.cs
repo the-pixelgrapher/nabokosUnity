@@ -36,7 +36,7 @@ public class PowerPad : MonoBehaviour
             sourceFound = false;
         }
 
-        power.isPowered = (sourceFound) ? true : false;
-        coll.enabled = (sourceFound) ? true : false;
+        power.isPowered = sourceFound;
+        //coll.enabled = sourceFound;
     }
 }

@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 3760769350031986418}
   m_Layer: 11
   m_Name: Gate-AND
-  m_TagString: Untagged
+  m_TagString: Power
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
