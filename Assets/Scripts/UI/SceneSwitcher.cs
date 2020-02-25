@@ -127,6 +127,7 @@ public class SceneSwitcher : MonoBehaviour
         fadeTimeCur = fadeTime;
         Vector4 initialColor = fadeImage.color;
         fadeImage.DOFade(0, fadeTime).SetEase(Ease.InOutSine);
+        FindObjectOfType<AudioManager>().Play("Swoosh");
     }
 
     public void QuitGame()

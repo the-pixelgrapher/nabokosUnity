@@ -49,7 +49,7 @@ public class InputHandler : MonoBehaviour
                 }
                 break;
 
-            case "downD": // down direction down
+            case "downD": // Down direction down
                 if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
                 {
                     isTrue = true;
@@ -58,6 +58,12 @@ public class InputHandler : MonoBehaviour
 
             case "confirmD": // Confirm button down
                 if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Space))
+                {
+                    isTrue = true;
+                }
+                break;
+            case "Undo": // Undo button
+                if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Backspace))
                 {
                     isTrue = true;
                 }

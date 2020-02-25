@@ -31,7 +31,7 @@ public class AudioManager : MonoBehaviour
             i.source.clip = i.Clip;
 
             i.source.volume = i.vol;
-            i.source.pitch = i.pit;
+            i.source.pitch = i.pitch;
             i.source.loop = i.loop;
         }
     }
@@ -45,7 +45,12 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        i.source.pitch = i.pit + Random.Range(-0.1f, 0.1f);
+        if (i.randomPitch)
+        {
+            // Pitch randomisation
+            i.source.pitch = i.pitch + Random.Range(-0.1f, 0.1f);
+        }
+
         i.source.Play();
     }
 
