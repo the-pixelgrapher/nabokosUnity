@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LogicGate : MonoBehaviour
+public class LogicGate : PowerSource
 {
-    private PowerSource power;
     private Vector2 gridPos;
 
     public enum GateType
@@ -21,57 +20,62 @@ public class LogicGate : MonoBehaviour
     private bool inputsFound;
     private Transform aTrans;
     private Transform bTrans;
+    private Transform output;
     private PowerSource a;
     private PowerSource b;
+    private Collider2D coll;
 
     private AudioManager aud;
     private bool powerSoundPlayed;
 
     void Start()
     {
-        power = GetComponent<PowerSource>();
-        gridPos = transform.position;
-        sprite = GetComponent<SpriteRenderer>();
+        output = transform.Find("Output");
         aTrans = transform.Find("InputA");
         bTrans = transform.Find("InputB");
+        gridPos = output.position;
+        sprite = GetComponent<SpriteRenderer>();
+        coll = GetComponent<Collider2D>();
         aud = FindObjectOfType<AudioManager>();
 
+        FindWires(gridPos);
+        Debug.Log(gridPos);
         UpdateInputs();
     }
 
 
     void LateUpdate()
     {
-        gridPos = transform.position;
 
         if (inputsFound)
         {
             switch (gate)
             {
                 case GateType.AND:
-                    power.isPowered = (a.isPowered && b.isPowered) ? true : false;
+                    isPowered = (a.isPowered && b.isPowered) ? true : false;
                     break;
 
                 case GateType.XOR:
-                    power.isPowered = (a.isPowered ^ b.isPowered) ? true : false;
+                    isPowered = (a.isPowered ^ b.isPowered) ? true : false;
                     break;
             }
         }
 
-        if (power.isPowered && !powerSoundPlayed)
+        if (isPowered && !powerSoundPlayed)
         {
             aud.Play("Power");
             aud.Play("Switch");
             powerSoundPlayed = true;
         }
 
-        if (!power.isPowered && powerSoundPlayed)
+        if (!isPowered && powerSoundPlayed)
         {
             aud.Play("Switch");
             powerSoundPlayed = false;
         }
 
-        sprite.sprite = power.isPowered ? powerOnSprite : powerOffSprite;
+        //coll.enabled = power.isPowered ? true : false;
+        sprite.sprite = isPowered ? powerOnSprite : powerOffSprite;
     }
 
     void UpdateInputs()

@@ -12,10 +12,9 @@ GameObject:
   - component: {fileID: 4854247894142880387}
   - component: {fileID: 4854247894142880412}
   - component: {fileID: 4854247894142880413}
-  - component: {fileID: 4854247894142880415}
   m_Layer: 11
   m_Name: Gate-XOR
-  m_TagString: Untagged
+  m_TagString: Power
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,22 +123,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd50d96471518ee4190624ffba159e5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPowered: 0
   gate: 1
   powerOffSprite: {fileID: 21300000, guid: 03519375592d9d846a904467f663c16d, type: 3}
   powerOnSprite: {fileID: 21300000, guid: b488cbe4970b5b547a5dab983ff56ac1, type: 3}
---- !u!114 &4854247894142880415
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4854247894142880384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9feb2b2882ede2541a06f40557abe83f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPowered: 0
 --- !u!1 &4854247895093942792
 GameObject:
   m_ObjectHideFlags: 0

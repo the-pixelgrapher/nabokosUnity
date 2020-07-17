@@ -12,10 +12,9 @@ GameObject:
   - component: {fileID: 2173699683671592241}
   - component: {fileID: 2173699683671592237}
   - component: {fileID: 2173699683671592243}
-  - component: {fileID: 2173699683671592242}
   m_Layer: 11
   m_Name: PowerPad
-  m_TagString: Untagged
+  m_TagString: Power
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -122,16 +121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 015b384387e83b44abb58ada6c9e82cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2173699683671592242
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2173699683671592246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9feb2b2882ede2541a06f40557abe83f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   isPowered: 0
+  checkedWires: []
+  newWires: []
