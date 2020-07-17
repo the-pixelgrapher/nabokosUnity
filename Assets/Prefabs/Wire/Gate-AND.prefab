@@ -72,7 +72,6 @@ GameObject:
   - component: {fileID: 3760769350031986414}
   - component: {fileID: 3760769350031986417}
   - component: {fileID: 3760769350031986416}
-  - component: {fileID: 3760769350031986418}
   m_Layer: 11
   m_Name: Gate-AND
   m_TagString: Power
@@ -184,19 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd50d96471518ee4190624ffba159e5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPowered: 0
   gate: 0
   powerOffSprite: {fileID: 21300000, guid: da80645d435498a499264402e0be8a93, type: 3}
   powerOnSprite: {fileID: 21300000, guid: 88a2267becd731c45911bc322301ddfc, type: 3}
---- !u!114 &3760769350031986418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3760769350031986413}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9feb2b2882ede2541a06f40557abe83f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPowered: 0

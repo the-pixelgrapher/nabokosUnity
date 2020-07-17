@@ -11,6 +11,7 @@ public class Wire : MonoBehaviour
     private Vector2 gridPos;
     private string id;
     private PowerSource power;
+    public List<PowerSource> powerSources;
 
     private SpriteRenderer sprite;
     public Sprite powerOffSprite;
@@ -23,16 +24,24 @@ public class Wire : MonoBehaviour
         id = GlobalData.GetAdj(gridPos, "Wire");
         sprite = GetComponent<SpriteRenderer>();
         power = GetComponent<PowerSource>();
+        power.isPowered = false;
     }
 
     void FixedUpdate()
     {
         gridPos = transform.position;
         //isPowered = false;
-        power.isPowered = false;
+
         depth = maxDepth;
-        CheckPower();
+        //CheckPower();
         sprite.sprite = power.isPowered ? powerOnSprite : powerOffSprite;
+
+        bool poweredState = false;
+        for (int i = 0; i < powerSources.Count; i++)
+        {
+            if (powerSources[i].isPowered) { poweredState = true; }
+        }
+        power.isPowered = poweredState;
 
     }
 

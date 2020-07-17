@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerPad : MonoBehaviour
+public class PowerPad : PowerSource
 {
-    private PowerSource power;
     private Vector2 gridPos;
 
     private bool sourceFound;
@@ -12,11 +11,11 @@ public class PowerPad : MonoBehaviour
 
     private Collider2D coll;
 
-    void Start()
+    private void Start()
     {
-        power = GetComponent<PowerSource>();
         gridPos = transform.position;
         coll = GetComponent<Collider2D>();
+        FindWires(gridPos);
     }
 
 
@@ -36,7 +35,7 @@ public class PowerPad : MonoBehaviour
             sourceFound = false;
         }
 
-        power.isPowered = sourceFound;
+        isPowered = sourceFound;
         //coll.enabled = sourceFound;
     }
 }

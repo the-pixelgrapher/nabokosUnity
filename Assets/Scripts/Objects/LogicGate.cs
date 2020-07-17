@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LogicGate : MonoBehaviour
+public class LogicGate : PowerSource
 {
-    private PowerSource power;
     private Vector2 gridPos;
 
     public enum GateType
@@ -30,7 +29,6 @@ public class LogicGate : MonoBehaviour
 
     void Start()
     {
-        power = GetComponent<PowerSource>();
         gridPos = transform.position;
         sprite = GetComponent<SpriteRenderer>();
         aTrans = transform.Find("InputA");
@@ -51,30 +49,30 @@ public class LogicGate : MonoBehaviour
             switch (gate)
             {
                 case GateType.AND:
-                    power.isPowered = (a.isPowered && b.isPowered) ? true : false;
+                    isPowered = (a.isPowered && b.isPowered) ? true : false;
                     break;
 
                 case GateType.XOR:
-                    power.isPowered = (a.isPowered ^ b.isPowered) ? true : false;
+                    isPowered = (a.isPowered ^ b.isPowered) ? true : false;
                     break;
             }
         }
 
-        if (power.isPowered && !powerSoundPlayed)
+        if (isPowered && !powerSoundPlayed)
         {
             aud.Play("Power");
             aud.Play("Switch");
             powerSoundPlayed = true;
         }
 
-        if (!power.isPowered && powerSoundPlayed)
+        if (!isPowered && powerSoundPlayed)
         {
             aud.Play("Switch");
             powerSoundPlayed = false;
         }
 
         //coll.enabled = power.isPowered ? true : false;
-        sprite.sprite = power.isPowered ? powerOnSprite : powerOffSprite;
+        sprite.sprite = isPowered ? powerOnSprite : powerOffSprite;
     }
 
     void UpdateInputs()
