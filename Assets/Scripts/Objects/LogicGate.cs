@@ -20,6 +20,7 @@ public class LogicGate : PowerSource
     private bool inputsFound;
     private Transform aTrans;
     private Transform bTrans;
+    private Transform output;
     private PowerSource a;
     private PowerSource b;
     private Collider2D coll;
@@ -29,20 +30,22 @@ public class LogicGate : PowerSource
 
     void Start()
     {
-        gridPos = transform.position;
-        sprite = GetComponent<SpriteRenderer>();
+        output = transform.Find("Output");
         aTrans = transform.Find("InputA");
         bTrans = transform.Find("InputB");
+        gridPos = output.position;
+        sprite = GetComponent<SpriteRenderer>();
         coll = GetComponent<Collider2D>();
         aud = FindObjectOfType<AudioManager>();
 
+        FindWires(gridPos);
+        Debug.Log(gridPos);
         UpdateInputs();
     }
 
 
     void LateUpdate()
     {
-        gridPos = transform.position;
 
         if (inputsFound)
         {

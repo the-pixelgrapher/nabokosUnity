@@ -4,7 +4,6 @@ using UnityEngine;
 public class PowerSource : MonoBehaviour
 {
     public bool isPowered;
-    private Vector2 pos;
     public List<Wire> checkedWires;
     public List<Wire> newWires;
 
@@ -24,8 +23,13 @@ public class PowerSource : MonoBehaviour
                 Debug.Log("finding wires");
                 newWires.Add(Physics2D.OverlapPointAll(_pos + dir[i], LayerMask.GetMask("Wire"))[0].GetComponent<Wire>());
             }
+            if (Physics2D.OverlapPoint(_pos, LayerMask.GetMask("Wire")))
+            {
+                newWires.Add(Physics2D.OverlapPointAll(_pos, LayerMask.GetMask("Wire"))[0].GetComponent<Wire>());
+            }
         }
 
+        // Find all connected wires
         while (newWires.Count > 0)
         {
             Wire checkedWire = newWires[0];
@@ -53,6 +57,7 @@ public class PowerSource : MonoBehaviour
                 }
             }
 
+            // Add connected wires to list of checked wires
             checkedWires.Add(checkedWire);
             newWires.Remove(checkedWire);
         }
