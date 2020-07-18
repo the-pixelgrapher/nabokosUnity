@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class LogicGate : PowerSource
 {
@@ -11,6 +9,7 @@ public class LogicGate : PowerSource
         AND,
         XOR
     }
+
     public GateType gate;
 
     private SpriteRenderer sprite;
@@ -27,7 +26,7 @@ public class LogicGate : PowerSource
     private AudioManager aud;
     private bool powerSoundPlayed;
 
-    void Start()
+    private void Start()
     {
         output = transform.Find("Output");
         aTrans = transform.Find("InputA");
@@ -37,12 +36,10 @@ public class LogicGate : PowerSource
         aud = FindObjectOfType<AudioManager>();
 
         FindWires(gridPos);
-        Debug.Log(gridPos);
         UpdateInputs();
     }
 
-
-    void LateUpdate()
+    private void LateUpdate()
     {
         if (inputsFound)
         {
@@ -75,9 +72,8 @@ public class LogicGate : PowerSource
         sprite.sprite = isPowered ? powerOnSprite : powerOffSprite;
     }
 
-    void UpdateInputs()
+    private void UpdateInputs()
     {
-
         if (Physics2D.OverlapPoint(aTrans.position, LayerMask.GetMask("Wire")) && Physics2D.OverlapPoint(bTrans.position, LayerMask.GetMask("Wire")))
         {
             a = Physics2D.OverlapPointAll(aTrans.position, LayerMask.GetMask("Wire"))[0].GetComponent<PowerSource>();
@@ -92,6 +88,5 @@ public class LogicGate : PowerSource
 
             inputsFound = true;
         }
-
     }
 }

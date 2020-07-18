@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -7,13 +6,51 @@ public class GameManager : MonoBehaviour
     public int level;
     public bool levelComplete;
 
-    void Start()
+    [SerializeField]
+    private int moveNumber = -1;
+
+    public List<Entity> entities;
+
+    private void Start()
     {
-        
+        // Find all entities (undoable objects)
+        var tempList = FindObjectsOfType<Entity>();
+        for (int i = 0; i < tempList.Length; i++)
+        {
+            entities.Add(tempList[i]);
+        }
+
+        GlobalRecordState();
     }
 
-    void Update()
+    private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            GlobalUndo();
+        }
+    }
+
+    public void GlobalRecordState()
+    {
+        for (int i = 0; i < entities.Count; i++)
+        {
+            entities[i].RecordState();
+        }
+
+        moveNumber++;
+    }
+
+    public void GlobalUndo()
+    {
+        if (moveNumber > 0)
+        {
+            for (int i = 0; i < entities.Count; i++)
+            {
+                entities[i].Undo(moveNumber - 1);
+            }
+
+            moveNumber--;
+        }
     }
 }

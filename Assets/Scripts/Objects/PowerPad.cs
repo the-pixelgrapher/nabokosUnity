@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PowerPad : PowerSource
 {
@@ -13,7 +11,7 @@ public class PowerPad : PowerSource
         FindWires(gridPos);
     }
 
-    void Update()
+    private void Update()
     {
         if (Physics2D.OverlapPoint(gridPos, LayerMask.GetMask("Crate")))
         {

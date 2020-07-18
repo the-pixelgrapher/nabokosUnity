@@ -1,27 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using DG.Tweening;
 using UnityEngine;
-using DG.Tweening;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Entity
 {
-    public Vector2 gridPos;                 // Player position on grid
     public bool isPowered;                  // Is magnet powered on?
-    public int moveCount;
     public LayerMask solidLayers;
     private bool isPulling;
     private Vector2 direction;
-
-    public enum Rot
-    {
-        Right,
-        Up,
-        Left,
-        Down
-    }
-    public Rot magRotation;
-    private List<Rot> rotRecord = new List<Rot>();
-    private List<Vector2> moveRecord = new List<Vector2>();
 
     private SpriteRenderer sprite;          // Player sprite component
     public Sprite powerOffSprite;
@@ -29,20 +14,26 @@ public class PlayerController : MonoBehaviour
 
     private InputHandler iman;              // Input handler for input reading
     private SceneSwitcher scene;
+    private GameManager gameMan;
     private AudioManager aud;
 
-    void Start()
+    private bool madeMove;
+
+    private void Start()
     {
         sprite = GetComponent<SpriteRenderer>();
         iman = FindObjectOfType<InputHandler>();
         scene = FindObjectOfType<SceneSwitcher>();
+        gameMan = FindObjectOfType<GameManager>();
         aud = FindObjectOfType<AudioManager>();
         SetRotation();
         Tween();
     }
 
-    void Update()
+    private void Update()
     {
+        madeMove = false;
+
         // Toggle magnet
         if (iman.InputRead("confirmD"))
         {
@@ -60,15 +51,18 @@ public class PlayerController : MonoBehaviour
 
         PlayerMovement();
 
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            UndoMove();
-        }
-
         if (Input.GetKeyDown(KeyCode.R))
         {
             // restart
             scene.SceneSwitch(GlobalData.curScene);
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (madeMove)
+        {
+            gameMan.GlobalRecordState();
         }
     }
 
@@ -99,9 +93,7 @@ public class PlayerController : MonoBehaviour
         {
             if (direction != Vector2.zero)
             {
-                // record movement for undo
-                moveRecord.Add(gridPos);
-                moveRecord[moveCount] = gridPos;
+                madeMove = true;
 
                 MagnetPull();
                 gridPos += direction;
@@ -110,8 +102,6 @@ public class PlayerController : MonoBehaviour
                 Tween();
 
                 aud.Play("Move");
-
-                moveCount++;
             }
         }
     }
@@ -123,9 +113,8 @@ public class PlayerController : MonoBehaviour
         if (!isPowered)
             return;
 
-        GameObject crate = null;
-
-        switch (magRotation)
+        GameObject crate;
+        switch (curRot)
         {
             case Rot.Right:
                 if (Physics2D.OverlapPoint(gridPos + Vector2.right, LayerMask.GetMask("Crate")))
@@ -135,6 +124,7 @@ public class PlayerController : MonoBehaviour
                     if (direction == Vector2.left)
                     {
                         crate.transform.DOMoveX(gridPos.x, 0.1667f);
+                        crate.GetComponent<Entity>().gridPos.x = gridPos.x;
                         isPulling = true;
                     }
                 }
@@ -148,6 +138,7 @@ public class PlayerController : MonoBehaviour
                     if (direction == Vector2.down)
                     {
                         crate.transform.DOMoveY(gridPos.y, 0.1667f);
+                        crate.GetComponent<Entity>().gridPos.y = gridPos.y;
                         isPulling = true;
                     }
                 }
@@ -161,6 +152,7 @@ public class PlayerController : MonoBehaviour
                     if (direction == Vector2.right)
                     {
                         crate.transform.DOMoveX(gridPos.x, 0.1667f);
+                        crate.GetComponent<Entity>().gridPos.x = gridPos.x;
                         isPulling = true;
                     }
                 }
@@ -174,6 +166,7 @@ public class PlayerController : MonoBehaviour
                     if (direction == Vector2.up)
                     {
                         crate.transform.DOMoveY(gridPos.y, 0.1667f);
+                        crate.GetComponent<Entity>().gridPos.y = gridPos.y;
                         isPulling = true;
                     }
                 }
@@ -181,33 +174,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void UndoMove()
-    {
-        if (moveCount > 0)
-        {
-            gridPos = moveRecord[moveCount - 1];
-            magRotation = rotRecord[moveCount - 1];
-            moveCount--;
-
-            Tween();
-        }
-    }
-
     private void Tween()
     {
         transform.DOMove(gridPos, 0.1667f);
 
-        switch (magRotation)
+        switch (curRot)
         {
             case Rot.Right:
                 transform.DORotate(new Vector3(0, 0, 0), 0.1667f);
                 break;
+
             case Rot.Up:
                 transform.DORotate(new Vector3(0, 0, 90), 0.1667f);
                 break;
+
             case Rot.Left:
                 transform.DORotate(new Vector3(0, 0, 180), 0.1667f);
                 break;
+
             case Rot.Down:
                 transform.DORotate(new Vector3(0, 0, 270), 0.1667f);
                 break;
@@ -227,145 +211,169 @@ public class PlayerController : MonoBehaviour
                     break;
 
                 case "1000":
-                    switch (magRotation)
+                    switch (curRot)
                     {
                         case Rot.Right:
-                            magRotation = Rot.Right;
+                            curRot = Rot.Right;
                             break;
+
                         case Rot.Up:
-                            magRotation = Rot.Right;
+                            curRot = Rot.Right;
                             break;
+
                         case Rot.Left:
-                            magRotation = Rot.Right;
+                            curRot = Rot.Right;
                             break;
+
                         case Rot.Down:
-                            magRotation = Rot.Right;
+                            curRot = Rot.Right;
                             break;
                     }
                     break;
 
                 case "0100":
-                    switch (magRotation)
+                    switch (curRot)
                     {
                         case Rot.Right:
-                            magRotation = Rot.Up;
+                            curRot = Rot.Up;
                             break;
+
                         case Rot.Up:
-                            magRotation = Rot.Up;
+                            curRot = Rot.Up;
                             break;
+
                         case Rot.Left:
-                            magRotation = Rot.Up;
+                            curRot = Rot.Up;
                             break;
+
                         case Rot.Down:
-                            magRotation = Rot.Up;
+                            curRot = Rot.Up;
                             break;
                     }
                     break;
 
                 case "0010":
-                    switch (magRotation)
+                    switch (curRot)
                     {
                         case Rot.Right:
-                            magRotation = Rot.Left;
+                            curRot = Rot.Left;
                             break;
+
                         case Rot.Up:
-                            magRotation = Rot.Left;
+                            curRot = Rot.Left;
                             break;
+
                         case Rot.Left:
-                            magRotation = Rot.Left;
+                            curRot = Rot.Left;
                             break;
+
                         case Rot.Down:
-                            magRotation = Rot.Left;
+                            curRot = Rot.Left;
                             break;
                     }
                     break;
 
                 case "0001":
-                    switch (magRotation)
+                    switch (curRot)
                     {
                         case Rot.Right:
-                            magRotation = Rot.Down;
+                            curRot = Rot.Down;
                             break;
+
                         case Rot.Up:
-                            magRotation = Rot.Down;
+                            curRot = Rot.Down;
                             break;
+
                         case Rot.Left:
-                            magRotation = Rot.Down;
+                            curRot = Rot.Down;
                             break;
+
                         case Rot.Down:
-                            magRotation = Rot.Down;
+                            curRot = Rot.Down;
                             break;
                     }
                     break;
 
                 case "1100":
-                    switch (magRotation)
+                    switch (curRot)
                     {
                         case Rot.Right:
-                            magRotation = Rot.Right;
+                            curRot = Rot.Right;
                             break;
+
                         case Rot.Up:
-                            magRotation = Rot.Up;
+                            curRot = Rot.Up;
                             break;
+
                         case Rot.Left:
-                            magRotation = Rot.Up;
+                            curRot = Rot.Up;
                             break;
+
                         case Rot.Down:
-                            magRotation = Rot.Right;
+                            curRot = Rot.Right;
                             break;
                     }
                     break;
 
                 case "0110":
-                    switch (magRotation)
+                    switch (curRot)
                     {
                         case Rot.Right:
-                            magRotation = Rot.Up;
+                            curRot = Rot.Up;
                             break;
+
                         case Rot.Up:
-                            magRotation = Rot.Up;
+                            curRot = Rot.Up;
                             break;
+
                         case Rot.Left:
-                            magRotation = Rot.Left;
+                            curRot = Rot.Left;
                             break;
+
                         case Rot.Down:
-                            magRotation = Rot.Left;
+                            curRot = Rot.Left;
                             break;
                     }
                     break;
 
                 case "0011":
-                    switch (magRotation)
+                    switch (curRot)
                     {
                         case Rot.Right:
-                            magRotation = Rot.Down;
+                            curRot = Rot.Down;
                             break;
+
                         case Rot.Up:
-                            magRotation = Rot.Left;
+                            curRot = Rot.Left;
                             break;
+
                         case Rot.Left:
-                            magRotation = Rot.Left;
+                            curRot = Rot.Left;
                             break;
+
                         case Rot.Down:
-                            magRotation = Rot.Down;
+                            curRot = Rot.Down;
                             break;
                     }
                     break;
 
                 case "1001":
-                    switch (magRotation)
+                    switch (curRot)
                     {
                         case Rot.Right:
-                            magRotation = Rot.Right;
+                            curRot = Rot.Right;
                             break;
+
                         case Rot.Up:
-                            magRotation = Rot.Right;
+                            curRot = Rot.Right;
                             break;
+
                         case Rot.Left:
-                            magRotation = Rot.Down;
+                            curRot = Rot.Down;
                             break;
+
                         case Rot.Down:
-                            magRotation = Rot.Down;
+                            curRot = Rot.Down;
                             break;
                     }
                     break;
@@ -392,15 +400,10 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
-
-        // Record rotation for undo
-        rotRecord.Add(magRotation);
-        rotRecord[moveCount] = magRotation;
     }
 
     private void OnDestroy()
     {
         transform.DOKill(true);
     }
-
 }
