@@ -38,5 +38,10 @@ public class Entity : MonoBehaviour
     public void Undo()
     {
         Debug.Log("UndoingMove");
+
+        // Undo position
+        gridPos = posRecord[posRecord.Count - 2];
+        transform.DOMove(gridPos, 0.1667f);
+        posRecord.RemoveAt(posRecord.Count - 1);
     }
 }

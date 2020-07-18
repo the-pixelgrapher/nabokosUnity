@@ -6,7 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public int level;
     public bool levelComplete;
-    public int moveNumber;
+    [SerializeField]
+    private int moveNumber = -1;
 
     public List<Entity> entities;
 
@@ -18,7 +19,8 @@ public class GameManager : MonoBehaviour
         {
             entities.Add(tempList[i]);
         }
-       
+
+        GlobalRecordState();
     }
 
     void Update()
@@ -35,13 +37,20 @@ public class GameManager : MonoBehaviour
         {
             entities[i].RecordState();
         }
+
+        moveNumber++;
     }
 
     public void GlobalUndo()
     {
-        for (int i = 0; i < entities.Count; i++)
+        if (moveNumber > 0)
         {
-            entities[i].Undo();
+            for (int i = 0; i < entities.Count; i++)
+            {
+                entities[i].Undo();
+            }
+
+            moveNumber--;
         }
     }
 
