@@ -1,9 +1,23 @@
 ﻿using System;
+using UnityEngine;
 
 public class GlobalData
 {
-    public static string seed = "Samus Aran";
     public static string curScene;
+    public static bool musicStarted;
+
+    public static string GetAdj(Vector2 pos, string layer)
+    {
+        string magID = "0000";
+        int right = Physics2D.OverlapPoint(pos + Vector2.right, LayerMask.GetMask(layer)) ? 1 : 0;
+        int up = Physics2D.OverlapPoint(pos + Vector2.up, LayerMask.GetMask(layer)) ? 1 : 0;
+        int left = Physics2D.OverlapPoint(pos + Vector2.left, LayerMask.GetMask(layer)) ? 1 : 0;
+        int down = Physics2D.OverlapPoint(pos + Vector2.down, LayerMask.GetMask(layer)) ? 1 : 0;
+
+        magID = right + "" + up + "" + left + "" + down;
+
+        return magID;
+    }
 
     public static string NumberToWords(int number)
     {

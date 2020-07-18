@@ -7,10 +7,10 @@ public class PlayerController : MonoBehaviour
 {
     public Vector2 gridPos;                 // Player position on grid
     public bool isPowered;                  // Is magnet powered on?
-    public bool isPulling;
     public int moveCount;
-    public Vector2 direction;
-    private List<Vector2> moveRecord = new List<Vector2>();
+    public LayerMask solidLayers;
+    private bool isPulling;
+    private Vector2 direction;
 
     public enum Rot
     {
@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     }
     public Rot magRotation;
     private List<Rot> rotRecord = new List<Rot>();
+    private List<Vector2> moveRecord = new List<Vector2>();
 
     private SpriteRenderer sprite;          // Player sprite component
     public Sprite powerOffSprite;
@@ -28,12 +29,14 @@ public class PlayerController : MonoBehaviour
 
     private InputHandler iman;              // Input handler for input reading
     private SceneSwitcher scene;
+    private AudioManager aud;
 
     void Start()
     {
         sprite = GetComponent<SpriteRenderer>();
         iman = FindObjectOfType<InputHandler>();
         scene = FindObjectOfType<SceneSwitcher>();
+        aud = FindObjectOfType<AudioManager>();
         SetRotation();
         Tween();
     }
@@ -48,7 +51,9 @@ public class PlayerController : MonoBehaviour
             {
                 SetRotation();
                 Tween();
+                aud.Play("Power");
             }
+            aud.Play("Switch");
         }
 
         sprite.sprite = isPowered ? powerOnSprite : powerOffSprite;
@@ -90,7 +95,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Collision check
-        if (!Physics2D.OverlapCircle(gridPos + direction, 0.475f))
+        if (!Physics2D.OverlapCircle(gridPos + direction, 0.475f, solidLayers))
         {
             if (direction != Vector2.zero)
             {
@@ -102,8 +107,9 @@ public class PlayerController : MonoBehaviour
                 gridPos += direction;
 
                 SetRotation();
-                
                 Tween();
+
+                aud.Play("Move");
 
                 moveCount++;
             }
@@ -128,7 +134,7 @@ public class PlayerController : MonoBehaviour
 
                     if (direction == Vector2.left)
                     {
-                        crate.transform.DOMove(gridPos, 0.1667f);
+                        crate.transform.DOMoveX(gridPos.x, 0.1667f);
                         isPulling = true;
                     }
                 }
@@ -141,7 +147,7 @@ public class PlayerController : MonoBehaviour
 
                     if (direction == Vector2.down)
                     {
-                        crate.transform.DOMove(gridPos, 0.1667f);
+                        crate.transform.DOMoveY(gridPos.y, 0.1667f);
                         isPulling = true;
                     }
                 }
@@ -154,7 +160,7 @@ public class PlayerController : MonoBehaviour
 
                     if (direction == Vector2.right)
                     {
-                        crate.transform.DOMove(gridPos, 0.1667f);
+                        crate.transform.DOMoveX(gridPos.x, 0.1667f);
                         isPulling = true;
                     }
                 }
@@ -167,26 +173,12 @@ public class PlayerController : MonoBehaviour
 
                     if (direction == Vector2.up)
                     {
-                        crate.transform.DOMove(gridPos, 0.1667f);
+                        crate.transform.DOMoveY(gridPos.y, 0.1667f);
                         isPulling = true;
                     }
                 }
                 break;
         }
-    }
-
-    private string GetAdjMag(Vector2 pos)
-    {
-        string magID = "0000";
-        int right = Physics2D.OverlapPoint(pos + Vector2.right, LayerMask.GetMask("Crate")) ? 1: 0;
-        int up = Physics2D.OverlapPoint(pos + Vector2.up, LayerMask.GetMask("Crate")) ? 1 : 0;
-        int left = Physics2D.OverlapPoint(pos + Vector2.left, LayerMask.GetMask("Crate")) ? 1 : 0;
-        int down = Physics2D.OverlapPoint(pos + Vector2.down, LayerMask.GetMask("Crate")) ? 1 : 0;
-
-        magID = right + "" + up + "" + left + "" + down;
-        //Debug.Log(magID);
-
-        return magID;
     }
 
     private void UndoMove()
@@ -224,7 +216,7 @@ public class PlayerController : MonoBehaviour
 
     private void SetRotation()
     {
-        string mag = GetAdjMag(gridPos);
+        string mag = GlobalData.GetAdj(gridPos, "Crate");
         // Right, Up, Left, Down
 
         if (!isPulling && isPowered)
