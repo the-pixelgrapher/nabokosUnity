@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using DG.Tweening;
 using UnityEngine;
-using DG.Tweening;
 
 public class ExitDoor : MonoBehaviour
 {
@@ -19,7 +17,7 @@ public class ExitDoor : MonoBehaviour
     private GameManager game;
     private AudioManager aud;
 
-    void Start()
+    private void Start()
     {
         coll = GetComponent<Collider2D>();
         gridPos = transform.position;
@@ -31,8 +29,7 @@ public class ExitDoor : MonoBehaviour
         UpdateInputs();
     }
 
-
-    void LateUpdate()
+    private void LateUpdate()
     {
         if (sourceFound)
         {
@@ -66,13 +63,12 @@ public class ExitDoor : MonoBehaviour
         }
     }
 
-    void UpdateInputs()
+    private void UpdateInputs()
     {
-        if (Physics2D.OverlapPoint(inputTrans.position, LayerMask.GetMask("Wire")) )
+        if (Physics2D.OverlapPoint(inputTrans.position, LayerMask.GetMask("Wire")))
         {
             source = Physics2D.OverlapPointAll(inputTrans.position, LayerMask.GetMask("Wire"))[0].GetComponent<PowerSource>();
             sourceFound = true;
         }
     }
-
 }

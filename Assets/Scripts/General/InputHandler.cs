@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class InputHandler : MonoBehaviour
 {
@@ -12,14 +10,12 @@ public class InputHandler : MonoBehaviour
     private float leftTimer;
     private float downTimer;
 
-    void Start()
+    private void Start()
     {
-        
     }
 
-    void Update()
+    private void Update()
     {
-
     }
 
     public bool InputRead(string inputButton)
@@ -62,6 +58,7 @@ public class InputHandler : MonoBehaviour
                     isTrue = true;
                 }
                 break;
+
             case "Undo": // Undo button
                 if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Backspace))
                 {

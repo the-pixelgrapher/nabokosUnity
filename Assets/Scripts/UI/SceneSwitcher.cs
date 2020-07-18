@@ -1,14 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using DG.Tweening;
-using TMPro;
 
 public class SceneSwitcher : MonoBehaviour
 {
-
     public GameObject fadePanel;
     public float fadeTime = 0.5f;
     private float fadeInDelay = 0.25f;
@@ -21,15 +17,14 @@ public class SceneSwitcher : MonoBehaviour
 
     public AudioClip clickSound;
 
-    void Awake()
+    private void Awake()
     {
         curScene = SceneManager.GetActiveScene().name;
         GlobalData.curScene = curScene;
         Debug.Log("Current scene: " + curScene);
-
     }
 
-    void Start()
+    private void Start()
     {
         if (curScene == "TitleScreen")
         {
@@ -46,7 +41,7 @@ public class SceneSwitcher : MonoBehaviour
         Invoke("ExitFade", fadeInDelay);
     }
 
-    void Update()
+    private void Update()
     {
         fadeTimeCur = Mathf.MoveTowards(fadeTimeCur, 0f, Time.unscaledDeltaTime);
         if (fadeTimeCur != 0)
@@ -90,7 +85,6 @@ public class SceneSwitcher : MonoBehaviour
                 SceneSwitch("TitleScreen");
             }
         }
-
     }
 
     public void SceneSwitch(string scene)
@@ -116,7 +110,6 @@ public class SceneSwitcher : MonoBehaviour
                 source.clip = clickSound;
                 source.Play();
             }
-
         }
     }
 
