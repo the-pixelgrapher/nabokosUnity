@@ -37,7 +37,6 @@ public class LogicGate : PowerSource
         aud = FindObjectOfType<AudioManager>();
 
         FindWires(gridPos);
-        Debug.Log(gridPos);
         UpdateInputs();
     }
 
