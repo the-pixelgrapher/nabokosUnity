@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using DG.Tweening;
 using UnityEngine;
-using DG.Tweening;
 
 public class PlayerController : Entity
 {
@@ -21,7 +19,7 @@ public class PlayerController : Entity
 
     private bool madeMove;
 
-    void Start()
+    private void Start()
     {
         sprite = GetComponent<SpriteRenderer>();
         iman = FindObjectOfType<InputHandler>();
@@ -32,7 +30,7 @@ public class PlayerController : Entity
         Tween();
     }
 
-    void Update()
+    private void Update()
     {
         madeMove = false;
 
@@ -185,12 +183,15 @@ public class PlayerController : Entity
             case Rot.Right:
                 transform.DORotate(new Vector3(0, 0, 0), 0.1667f);
                 break;
+
             case Rot.Up:
                 transform.DORotate(new Vector3(0, 0, 90), 0.1667f);
                 break;
+
             case Rot.Left:
                 transform.DORotate(new Vector3(0, 0, 180), 0.1667f);
                 break;
+
             case Rot.Down:
                 transform.DORotate(new Vector3(0, 0, 270), 0.1667f);
                 break;
@@ -215,12 +216,15 @@ public class PlayerController : Entity
                         case Rot.Right:
                             curRot = Rot.Right;
                             break;
+
                         case Rot.Up:
                             curRot = Rot.Right;
                             break;
+
                         case Rot.Left:
                             curRot = Rot.Right;
                             break;
+
                         case Rot.Down:
                             curRot = Rot.Right;
                             break;
@@ -233,12 +237,15 @@ public class PlayerController : Entity
                         case Rot.Right:
                             curRot = Rot.Up;
                             break;
+
                         case Rot.Up:
                             curRot = Rot.Up;
                             break;
+
                         case Rot.Left:
                             curRot = Rot.Up;
                             break;
+
                         case Rot.Down:
                             curRot = Rot.Up;
                             break;
@@ -251,12 +258,15 @@ public class PlayerController : Entity
                         case Rot.Right:
                             curRot = Rot.Left;
                             break;
+
                         case Rot.Up:
                             curRot = Rot.Left;
                             break;
+
                         case Rot.Left:
                             curRot = Rot.Left;
                             break;
+
                         case Rot.Down:
                             curRot = Rot.Left;
                             break;
@@ -269,12 +279,15 @@ public class PlayerController : Entity
                         case Rot.Right:
                             curRot = Rot.Down;
                             break;
+
                         case Rot.Up:
                             curRot = Rot.Down;
                             break;
+
                         case Rot.Left:
                             curRot = Rot.Down;
                             break;
+
                         case Rot.Down:
                             curRot = Rot.Down;
                             break;
@@ -287,12 +300,15 @@ public class PlayerController : Entity
                         case Rot.Right:
                             curRot = Rot.Right;
                             break;
+
                         case Rot.Up:
                             curRot = Rot.Up;
                             break;
+
                         case Rot.Left:
                             curRot = Rot.Up;
                             break;
+
                         case Rot.Down:
                             curRot = Rot.Right;
                             break;
@@ -305,12 +321,15 @@ public class PlayerController : Entity
                         case Rot.Right:
                             curRot = Rot.Up;
                             break;
+
                         case Rot.Up:
                             curRot = Rot.Up;
                             break;
+
                         case Rot.Left:
                             curRot = Rot.Left;
                             break;
+
                         case Rot.Down:
                             curRot = Rot.Left;
                             break;
@@ -323,12 +342,15 @@ public class PlayerController : Entity
                         case Rot.Right:
                             curRot = Rot.Down;
                             break;
+
                         case Rot.Up:
                             curRot = Rot.Left;
                             break;
+
                         case Rot.Left:
                             curRot = Rot.Left;
                             break;
+
                         case Rot.Down:
                             curRot = Rot.Down;
                             break;
@@ -341,12 +363,15 @@ public class PlayerController : Entity
                         case Rot.Right:
                             curRot = Rot.Right;
                             break;
+
                         case Rot.Up:
                             curRot = Rot.Right;
                             break;
+
                         case Rot.Left:
                             curRot = Rot.Down;
                             break;
+
                         case Rot.Down:
                             curRot = Rot.Down;
                             break;
@@ -375,12 +400,10 @@ public class PlayerController : Entity
                     break;
             }
         }
-
     }
 
     private void OnDestroy()
     {
         transform.DOKill(true);
     }
-
 }
