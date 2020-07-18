@@ -20,7 +20,6 @@ public class PowerSource : MonoBehaviour
         {
             if (Physics2D.OverlapPoint(_pos + dir[i], LayerMask.GetMask("Wire")))
             {
-                Debug.Log("finding wires");
                 newWires.Add(Physics2D.OverlapPointAll(_pos + dir[i], LayerMask.GetMask("Wire"))[0].GetComponent<Wire>());
             }
             if (Physics2D.OverlapPoint(_pos, LayerMask.GetMask("Wire")))
@@ -37,23 +36,36 @@ public class PowerSource : MonoBehaviour
 
             for (int i = 0; i < dir.Length; i++)
             {
-                if (Physics2D.OverlapPoint(checkedPos + dir[i], LayerMask.GetMask("Wire")))
+                // Check if this already contains a known wire
+                bool checkThisPos = true;
+                for (int j = 0; j < checkedWires.Count; j++)
                 {
-                    Debug.Log("finding wires");
-
-                    Wire newWire = Physics2D.OverlapPointAll(checkedPos + dir[i], LayerMask.GetMask("Wire"))[0].GetComponent<Wire>();
-
-                    bool alreadyChecked = false;
-                    for (int j = 0; j < newWires.Count; j++)
+                    Vector2 tile = checkedWires[j].transform.position;
+                    if (tile == checkedPos + dir[i])
                     {
-                        if (newWire == newWires[j]) { alreadyChecked = true; }
+                        checkThisPos = false;
                     }
-                    for (int j = 0; j < checkedWires.Count; j++)
-                    {
-                        if (newWire == checkedWires[j]) { alreadyChecked = true; }
-                    }
+                }
 
-                    if (!alreadyChecked) { newWires.Add(newWire); }
+                // For every new wire check adjacent wires if pos not already checked
+                if (checkThisPos)
+                {
+                    if (Physics2D.OverlapPoint(checkedPos + dir[i], LayerMask.GetMask("Wire")))
+                    {
+                        Wire newWire = Physics2D.OverlapPointAll(checkedPos + dir[i], LayerMask.GetMask("Wire"))[0].GetComponent<Wire>();
+
+                        bool alreadyChecked = false;
+                        for (int j = 0; j < newWires.Count; j++)
+                        {
+                            if (newWire == newWires[j]) { alreadyChecked = true; }
+                        }
+                        for (int j = 0; j < checkedWires.Count; j++)
+                        {
+                            if (newWire == checkedWires[j]) { alreadyChecked = true; }
+                        }
+
+                        if (!alreadyChecked) { newWires.Add(newWire); }
+                    }
                 }
             }
 

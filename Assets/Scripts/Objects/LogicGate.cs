@@ -23,7 +23,6 @@ public class LogicGate : PowerSource
     private Transform output;
     private PowerSource a;
     private PowerSource b;
-    private Collider2D coll;
 
     private AudioManager aud;
     private bool powerSoundPlayed;
@@ -35,7 +34,6 @@ public class LogicGate : PowerSource
         bTrans = transform.Find("InputB");
         gridPos = output.position;
         sprite = GetComponent<SpriteRenderer>();
-        coll = GetComponent<Collider2D>();
         aud = FindObjectOfType<AudioManager>();
 
         FindWires(gridPos);
@@ -46,7 +44,6 @@ public class LogicGate : PowerSource
 
     void LateUpdate()
     {
-
         if (inputsFound)
         {
             switch (gate)
