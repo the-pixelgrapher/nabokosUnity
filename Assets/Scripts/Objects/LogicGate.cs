@@ -26,8 +26,10 @@ public class LogicGate : PowerSource
     private AudioManager aud;
     private bool powerSoundPlayed;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         output = transform.Find("Output");
         aTrans = transform.Find("InputA");
         bTrans = transform.Find("InputB");
