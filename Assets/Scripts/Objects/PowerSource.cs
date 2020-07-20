@@ -4,8 +4,14 @@ using UnityEngine;
 public class PowerSource : MonoBehaviour
 {
     public bool isPowered;
-    public List<Wire> checkedWires;
-    public List<Wire> newWires;
+    protected List<Wire> checkedWires;
+    protected List<Wire> newWires;
+
+    protected virtual void Start()
+    {
+        checkedWires = new List<Wire>();
+        newWires = new List<Wire>();
+    }
 
     protected void FindWires(Vector2 _pos)
     {
