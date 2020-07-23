@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerController : Entity
 {
@@ -21,6 +22,9 @@ public class PlayerController : Entity
 
     private void Start()
     {
+        rotRecord = new List<Rot>();
+        posRecord = new List<Vector2>();
+
         sprite = GetComponent<SpriteRenderer>();
         iman = FindObjectOfType<InputHandler>();
         scene = FindObjectOfType<SceneSwitcher>();
@@ -32,6 +36,11 @@ public class PlayerController : Entity
 
     private void Update()
     {
+        if (madeMove)
+        {
+            gameMan.GlobalRecordState();
+        }
+
         madeMove = false;
 
         // Toggle magnet
@@ -60,10 +69,7 @@ public class PlayerController : Entity
 
     private void LateUpdate()
     {
-        if (madeMove)
-        {
-            gameMan.GlobalRecordState();
-        }
+
     }
 
     private void PlayerMovement()

@@ -21,6 +21,8 @@ public class Entity : MonoBehaviour
     private void Start()
     {
         gridPos = transform.position;
+        rotRecord = new List<Rot>();
+        posRecord = new List<Vector2>();
     }
 
     public void RecordState()
