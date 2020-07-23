@@ -18,7 +18,7 @@ public class Entity : MonoBehaviour
     public List<Rot> rotRecord;
     public List<Vector2> posRecord;
 
-    private void Start()
+    protected virtual void Awake()
     {
         gridPos = transform.position;
         rotRecord = new List<Rot>();

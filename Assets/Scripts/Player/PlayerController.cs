@@ -20,11 +20,13 @@ public class PlayerController : Entity
 
     private bool madeMove;
 
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
     private void Start()
     {
-        rotRecord = new List<Rot>();
-        posRecord = new List<Vector2>();
-
         sprite = GetComponent<SpriteRenderer>();
         iman = FindObjectOfType<InputHandler>();
         scene = FindObjectOfType<SceneSwitcher>();
