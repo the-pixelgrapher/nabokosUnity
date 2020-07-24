@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Record state for every Entity for undo
     public void GlobalRecordState()
     {
         for (int i = 0; i < entities.Count; i++)
@@ -41,6 +42,7 @@ public class GameManager : MonoBehaviour
         moveNumber++;
     }
 
+    // Undo state of every Entity
     public void GlobalUndo()
     {
         if (moveNumber > 0)
