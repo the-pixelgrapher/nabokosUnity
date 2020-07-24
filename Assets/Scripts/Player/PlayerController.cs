@@ -53,6 +53,8 @@ public class PlayerController : Entity
             {
                 SetRotation();
                 Tween();
+                rotRecord[posRecord.Count - 1] = curRot;
+
                 aud.Play("Power");
             }
             aud.Play("Switch");
