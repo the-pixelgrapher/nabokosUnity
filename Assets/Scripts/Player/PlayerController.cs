@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerController : Entity
 {
@@ -19,6 +20,11 @@ public class PlayerController : Entity
 
     private bool madeMove;
 
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
     private void Start()
     {
         sprite = GetComponent<SpriteRenderer>();
@@ -32,6 +38,11 @@ public class PlayerController : Entity
 
     private void Update()
     {
+        if (madeMove)
+        {
+            gameMan.GlobalRecordState();
+        }
+
         madeMove = false;
 
         // Toggle magnet
@@ -60,10 +71,7 @@ public class PlayerController : Entity
 
     private void LateUpdate()
     {
-        if (madeMove)
-        {
-            gameMan.GlobalRecordState();
-        }
+
     }
 
     private void PlayerMovement()

@@ -85,6 +85,9 @@ public class SceneSwitcher : MonoBehaviour
                 SceneSwitch("TitleScreen");
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1)) { SceneSwitch("TestScene"); }
+        if (Input.GetKeyDown(KeyCode.Alpha2)) { SceneSwitch("TestScene 1"); }
     }
 
     public void SceneSwitch(string scene)

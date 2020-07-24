@@ -5,8 +5,10 @@ public class PowerPad : PowerSource
     private Vector2 gridPos;
     private bool sourceFound;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         gridPos = transform.position;
         FindWires(gridPos);
     }
